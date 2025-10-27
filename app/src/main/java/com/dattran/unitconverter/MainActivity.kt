@@ -61,6 +61,7 @@ import com.dattran.unitconverter.banking.FinanceSection
 import com.dattran.unitconverter.banking.WalletSection
 import com.dattran.unitconverter.login.LoginScreen
 import com.dattran.unitconverter.ui.theme.UnitConverterTheme
+import com.dattran.unitconverter.uitabpager.TabNavigation
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
@@ -71,7 +72,8 @@ class MainActivity : ComponentActivity() {
             UnitConverterTheme {
                 SetBarColor(color = MaterialTheme.colorScheme.background)
 
-                LoginScreen()
+//                LoginScreen()
+                TabNavigation()
             }
         }
     }

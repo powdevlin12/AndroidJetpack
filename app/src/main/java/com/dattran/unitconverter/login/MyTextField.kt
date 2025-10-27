@@ -28,16 +28,18 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+@Preview
 @Composable
 fun MyTextField(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxWidth(),
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
     trailingText: String? = null,
-    textFieldState: TextFieldState,
-    hint: String,
+    textFieldState: TextFieldState = TextFieldState(),
+    hint: String? = "Input",
     keyboard: KeyboardType = KeyboardType.Text,
     isPassword: Boolean = false,
     onLeadingClick: () -> Unit = {},
@@ -50,7 +52,7 @@ fun MyTextField(
             trailingText = trailingText,
             trailingIcon = trailingIcon,
             textFieldState = textFieldState,
-            hint = hint,
+            hint = hint.toString(),
             onLeadingClick = onLeadingClick,
             onTrailingClick = onTrailingClick
         )
@@ -61,7 +63,7 @@ fun MyTextField(
             trailingText = trailingText,
             trailingIcon = trailingIcon,
             textFieldState = textFieldState,
-            hint = hint,
+            hint = hint.toString(),
             keyboard = keyboard,
             onLeadingClick = onLeadingClick,
             onTrailingClick = onTrailingClick
