@@ -49,7 +49,9 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     // system UI Controller
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+    val nav_version = "2.9.5"
 
+    implementation("androidx.navigation:navigation-compose:$nav_version")
     // Extended Icons
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
     implementation(libs.androidx.core.ktx)

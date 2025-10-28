@@ -24,6 +24,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.dattran.unitconverter.banking.WalletSection
+import com.dattran.unitconverter.login.LoginScreen
+import com.dattran.unitconverter.banking.BankingScreen
 import kotlinx.coroutines.launch
 
 data class TabItem(
@@ -77,13 +80,13 @@ fun TabNavigation() {
 
     var tabs = listOf(
         TabItem(text = "Home", icon = Icons.Default.Home) {
-            HomeScreen()
+            BankingScreen()
         },
         TabItem(text = "Setting", icon = Icons.Default.Settings) {
             SettingScreen()
         },
         TabItem(text = "Personal", icon = Icons.Default.AccountCircle) {
-            PersonalScreen()
+            LoginScreen()
         },
     )
 

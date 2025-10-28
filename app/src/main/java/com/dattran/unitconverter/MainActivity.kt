@@ -60,6 +60,7 @@ import com.dattran.unitconverter.banking.CurrenciresSection
 import com.dattran.unitconverter.banking.FinanceSection
 import com.dattran.unitconverter.banking.WalletSection
 import com.dattran.unitconverter.login.LoginScreen
+import com.dattran.unitconverter.navigation.Navigation
 import com.dattran.unitconverter.ui.theme.UnitConverterTheme
 import com.dattran.unitconverter.uitabpager.TabNavigation
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -73,7 +74,8 @@ class MainActivity : ComponentActivity() {
                 SetBarColor(color = MaterialTheme.colorScheme.background)
 
 //                LoginScreen()
-                TabNavigation()
+//                TabNavigation()
+                Navigation()
             }
         }
     }
@@ -86,30 +88,6 @@ private fun SetBarColor(color: Color) {
         systemUiController.setSystemBarsColor(
             color = color
         )
-    }
-}
-
-@Preview
-@Composable
-private fun HomeScreen() {
-    Scaffold(
-        bottomBar = {
-            BottomNavigatioBar()
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            WalletSection()
-            Spacer(modifier = Modifier.height(16.dp))
-            CardsSection()
-            Spacer(modifier = Modifier.height(16.dp))
-            FinanceSection()
-            Spacer(modifier = Modifier.height(16.dp))
-            CurrenciresSection()
-        }
     }
 }
 
