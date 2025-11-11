@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "UnitConverter"
 include(":app")
- 
+
