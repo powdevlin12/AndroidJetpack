@@ -12,5 +12,14 @@ data class MovieResponse(
     @SerializedName("total_results")
     val totalResults: Int
 ) {
-    
+
 }
+
+data class DeleteMovieResponse(
+    @SerializedName("message")
+    val message: Int,
+    @SerializedName("data")
+    val data: Movie
+)
+
+

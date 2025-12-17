@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dattran.unitconverter.movie_project.ui.components.AlertCustom
 import com.dattran.unitconverter.movie_project.ui.components.MovieList
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,15 +86,19 @@ fun HomeScreen(
                 else -> {
                     MovieList(
                         movies = uiState.movies,
+                        viewModel = viewModel
                     )
                 }
             }
+
+            if (uiState.showAlertDelete == true && uiState.movieToDelete != null) {
+                AlertCustom(
+                    title = "Xác nhận",
+                    message = "Bạn có chắc muốn xoá phim \"${uiState.movieToDelete?.title}\" không?",
+                    handleCancel = { viewModel.onDeleteCancel() },
+                    handleConfirm = { viewModel.onDeleteConfirm() }
+                )
+            }
         }
     }
-}
-
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen()
 }

@@ -3,8 +3,8 @@ package com.dattran.unitconverter.movie_project.data.model
 import com.google.gson.annotations.SerializedName
 
 data class Movie(
-    @SerializedName("id")
-    val id: Int,
+    @SerializedName("_id")
+    val id: String,
     @SerializedName("title")
     val title: String,
     @SerializedName("overview")

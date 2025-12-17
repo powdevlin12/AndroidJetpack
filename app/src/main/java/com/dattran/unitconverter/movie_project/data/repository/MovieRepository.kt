@@ -1,5 +1,6 @@
 package com.dattran.unitconverter.movie_project.data.repository
 
+import com.dattran.unitconverter.movie_project.data.model.DeleteMovieResponse
 import com.dattran.unitconverter.movie_project.data.model.MovieResponse
 import com.dattran.unitconverter.movie_project.data.service.MovieApiService
 
@@ -12,6 +13,15 @@ class MovieRepository(
         return try {
             val response = apiService.getPopularMovies(page = page)
             // Result<T> là một sealed class của Koltin để bọc kết quả thành công hoặc thất bại
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun deleteMovie(movieId: String): Result<DeleteMovieResponse> {
+        return try {
+            val response = apiService.deleteMovie(movieId)
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)

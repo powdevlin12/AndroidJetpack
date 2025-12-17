@@ -12,18 +12,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.dattran.unitconverter.movie_project.data.model.Movie
+import com.dattran.unitconverter.movie_project.ui.screens.home.HomeViewModel
 
 @Composable
 fun MovieItem(
     movie: Movie,
     onClick: () -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable(onClick = onClick),
+            .clickable(onClick = { viewModel.onClickItemDelete(movie = movie) }),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(

@@ -17,7 +17,10 @@ import kotlinx.coroutines.launch
 data class HomeUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val movies: List<Movie> = emptyList()
+    val movies: List<Movie> = emptyList(),
+    // handle delete movie
+    val movieToDelete: Movie? = null,
+    val showAlertDelete: Boolean = false
 )
 
 // ViewModel chịu trách nhiệm: Gọi repository, Xử lý logic, quản lý state, không vẽ UI
@@ -49,6 +52,47 @@ class HomeViewModel(
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         movies = response.results
+                    )
+                },
+                onFailure = { error ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = error.message ?: "Unknown error occurred"
+                    )
+                }
+            )
+        }
+    }
+
+    fun onClickItemDelete(movie: Movie) {
+        _uiState.value = _uiState.value.copy(
+            movieToDelete = movie,
+            showAlertDelete = true
+        )
+    }
+
+    fun onDeleteCancel() {
+        _uiState.value = _uiState.value.copy(
+            movieToDelete = null,
+            showAlertDelete = false
+        )
+    }
+
+    fun onDeleteConfirm() {
+        val movie = _uiState.value.movieToDelete ?: return
+
+        viewModelScope.launch {
+            // Xoá movie trong danh sách hiện tại
+            _uiState.value = _uiState.value.copy(
+                showAlertDelete = false
+            )
+
+            repository.deleteMovie(movie.id).fold(
+                onSuccess = { response ->
+                    val updatedList = _uiState.value.movies.filter { it.id != movie.id }
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        movies = updatedList
                     )
                 },
                 onFailure = { error ->
