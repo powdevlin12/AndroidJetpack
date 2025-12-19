@@ -3,9 +3,11 @@ package com.dattran.unitconverter.movie_project.ui.screens.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.dattran.unitconverter.movie_project.data.model.Movie
 import com.dattran.unitconverter.movie_project.data.repository.MovieRepository
 import com.dattran.unitconverter.movie_project.data.service.MovieApiService
+import com.dattran.unitconverter.movie_project.navigation.Screen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +22,8 @@ data class HomeUiState(
     val movies: List<Movie> = emptyList(),
     // handle delete movie
     val movieToDelete: Movie? = null,
-    val showAlertDelete: Boolean = false
+    val showAlertDelete: Boolean = false,
+    val navController: NavController? = null,
 )
 
 // ViewModel chịu trách nhiệm: Gọi repository, Xử lý logic, quản lý state, không vẽ UI
@@ -36,10 +39,10 @@ class HomeViewModel(
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     // gọi init ở đây -> ViewModel sinh ra -> load data, UI không cần gọi thủ công, tránh gọi nhiều lần khi recomposition
-    init {
-        Log.i("HomeViewModel", "Initialized")
-        loadMovies()
-    }
+//    init {
+//        Log.i("HomeViewModel", "Initialized")
+//        loadMovies()
+//    }
 
     fun loadMovies() {
         // viewModelScope.lunch: CoroutineScope được gắn với vòng đời của ViewModel, ViewModel bị destroy -> coroutin tự cancel
@@ -64,6 +67,19 @@ class HomeViewModel(
         }
     }
 
+    // set navController
+    fun setNavController(navController: NavController) {
+        _uiState.value = _uiState.value.copy(
+            navController = navController
+        )
+    }
+
+    // navigate to update movie screen
+    fun navigateToUpdateMovie(movieId: String) {
+        _uiState.value.navController?.navigate(Screen.Update.createRoute(movieId))
+    }
+
+    // handle delete
     fun onClickItemDelete(movie: Movie) {
         _uiState.value = _uiState.value.copy(
             movieToDelete = movie,

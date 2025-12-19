@@ -1,7 +1,10 @@
 package com.dattran.unitconverter.movie_project.data.repository
 
+import com.dattran.unitconverter.movie_project.data.model.BodyUpdateMovie
 import com.dattran.unitconverter.movie_project.data.model.DeleteMovieResponse
+import com.dattran.unitconverter.movie_project.data.model.MovieByIdResponse
 import com.dattran.unitconverter.movie_project.data.model.MovieResponse
+import com.dattran.unitconverter.movie_project.data.model.UpdateMovieResponse
 import com.dattran.unitconverter.movie_project.data.service.MovieApiService
 
 class MovieRepository(
@@ -19,9 +22,32 @@ class MovieRepository(
         }
     }
 
+    suspend fun getMovieById(movieId: String): Result<MovieByIdResponse> {
+        // Sử dụng try-catch để xử lý ngoại lệ khi gọi API
+        return try {
+            val response = apiService.getMovieById(movieId)
+            // Result<T> là một sealed class của Koltin để bọc kết quả thành công hoặc thất bại
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun deleteMovie(movieId: String): Result<DeleteMovieResponse> {
         return try {
             val response = apiService.deleteMovie(movieId)
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updateMovie(
+        movieForm: BodyUpdateMovie,
+        movieId: String
+    ): Result<UpdateMovieResponse> {
+        return try {
+            val response = apiService.updateMovie(movie = movieForm, movieId = movieId)
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)

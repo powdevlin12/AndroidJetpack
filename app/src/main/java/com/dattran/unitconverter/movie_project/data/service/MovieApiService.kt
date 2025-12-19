@@ -1,11 +1,17 @@
 package com.dattran.unitconverter.movie_project.data.service
 
+import com.dattran.unitconverter.movie_project.data.model.BodyUpdateMovie
 import com.dattran.unitconverter.movie_project.data.model.DeleteMovieResponse
+import com.dattran.unitconverter.movie_project.data.model.MovieByIdResponse
 import com.dattran.unitconverter.movie_project.data.model.MovieResponse
+import com.dattran.unitconverter.movie_project.data.model.UpdateMovieResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -15,10 +21,21 @@ interface MovieApiService {
         @Query("page") page: Int = 1,
     ): MovieResponse
 
+    @GET("movies/{movieId}")
+    suspend fun getMovieById(
+        @Path("movieId") movieId: String = "000",
+    ): MovieByIdResponse
+
     @DELETE("movies/{id}")
     suspend fun deleteMovie(
         @Path("id") movieId: String,
     ): DeleteMovieResponse
+
+    @PATCH("movies/{id}")
+    suspend fun updateMovie(
+        @Path("id") movieId: String,
+        @Body movie: BodyUpdateMovie
+    ): UpdateMovieResponse
 
     companion object {
         private const val BASE_URL = "http://10.0.2.2:1236/"

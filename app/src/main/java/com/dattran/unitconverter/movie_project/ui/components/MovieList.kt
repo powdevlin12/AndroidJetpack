@@ -16,9 +16,6 @@ fun MovieList(movies: List<Movie>, viewModel: HomeViewModel) {
         items(movies) { movie ->
             MovieItem(
                 movie = movie,
-                onClick = {
-
-                },
                 viewModel = viewModel
             )
         }

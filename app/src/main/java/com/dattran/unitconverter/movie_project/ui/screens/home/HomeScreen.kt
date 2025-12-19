@@ -11,11 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -24,14 +27,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.dattran.unitconverter.movie_project.ui.components.AlertCustom
 import com.dattran.unitconverter.movie_project.ui.components.MovieList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    navController: NavController,
     viewModel: HomeViewModel = viewModel()
 ) {
+    LaunchedEffect(Unit) {
+        // Chạy 1 lần duy nhất khi composable được đưa vào Composition
+        viewModel.setNavController(navController)
+        viewModel.loadMovies()
+    }
+
     // Biến StateFlow -> State
     val uiState by viewModel.uiState.collectAsState()
     Scaffold(
@@ -72,6 +83,11 @@ fun HomeScreen(
                             textAlign = TextAlign.Center
                         )
                         Spacer(modifier = Modifier.height(16.dp))
+                        OutlinedButton(
+                            onClick = { viewModel.loadMovies() }
+                        ) {
+                            Text("Thử lại")
+                        }
                     }
                 }
 
@@ -84,10 +100,15 @@ fun HomeScreen(
                 }
 
                 else -> {
-                    MovieList(
-                        movies = uiState.movies,
-                        viewModel = viewModel
-                    )
+                    PullToRefreshBox(
+                        isRefreshing = uiState.isLoading,
+                        onRefresh = { viewModel.loadMovies() }
+                    ) {
+                        MovieList(
+                            movies = uiState.movies,
+                            viewModel = viewModel
+                        )
+                    }
                 }
             }
 

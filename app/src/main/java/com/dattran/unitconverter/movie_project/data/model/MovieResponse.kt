@@ -15,6 +15,23 @@ data class MovieResponse(
 
 }
 
+data class MovieByIdResponse(
+    val data: Movie? = null,
+    val message: String
+)
+
+data class BodyUpdateMovie(
+    val title: String = "",
+    val overview: String = "",
+)
+
+data class UpdateMovieResponse(
+    @SerializedName("message")
+    val message: String,
+    @SerializedName("data")
+    val data: Movie
+)
+
 data class DeleteMovieResponse(
     @SerializedName("message")
     val message: Int,

@@ -10,8 +10,9 @@ fun AlertCustom(
     title: String,
     message: String,
     onDismiss: () -> Unit = {},
-    handleConfirm: () -> Unit,
-    handleCancel: () -> Unit
+    handleConfirm: () -> Unit = {},
+    handleCancel: () -> Unit = {},
+    onlyOk: Boolean = false,
 ) {
     // Implement your custom alert dialog here
     AlertDialog(
@@ -33,10 +34,12 @@ fun AlertCustom(
             }
         },
         dismissButton = {
-            Button(
-                onClick = handleCancel
-            ) {
-                Text("Huỷ")
+            if (!onlyOk) {
+                Button(
+                    onClick = handleCancel
+                ) {
+                    Text("Huỷ")
+                }
             }
         }
     )

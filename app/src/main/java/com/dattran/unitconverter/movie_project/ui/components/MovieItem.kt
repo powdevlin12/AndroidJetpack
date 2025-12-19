@@ -2,12 +2,9 @@ package com.dattran.unitconverter.movie_project.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -17,7 +14,6 @@ import com.dattran.unitconverter.movie_project.ui.screens.home.HomeViewModel
 @Composable
 fun MovieItem(
     movie: Movie,
-    onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel
 ) {
@@ -81,6 +77,21 @@ fun MovieItem(
                     overflow = TextOverflow.Ellipsis,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row {
+                    OutlinedButton(
+                        modifier = Modifier.padding(vertical = 4.dp, horizontal = 2.dp),
+                        onClick = {
+                            // Navigate to edit screen with movie ID
+                            viewModel.navigateToUpdateMovie(movie.id)
+                        }) {
+                        Text(
+                            "Chỉnh sửa"
+                        )
+                    }
+                }
             }
         }
     }
