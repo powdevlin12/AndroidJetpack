@@ -2,6 +2,7 @@ package com.dattran.unitconverter.movie_project.data.service
 
 import com.dattran.unitconverter.movie_project.data.model.BodyUpdateMovie
 import com.dattran.unitconverter.movie_project.data.model.DeleteMovieResponse
+import com.dattran.unitconverter.movie_project.data.model.Movie
 import com.dattran.unitconverter.movie_project.data.model.MovieByIdResponse
 import com.dattran.unitconverter.movie_project.data.model.MovieResponse
 import com.dattran.unitconverter.movie_project.data.model.UpdateMovieResponse
@@ -11,6 +12,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -20,6 +22,11 @@ interface MovieApiService {
     suspend fun getPopularMovies(
         @Query("page") page: Int = 1,
     ): MovieResponse
+
+    @POST("movies")
+    suspend fun createMovies(
+        @Body movie: BodyUpdateMovie,
+    ): UpdateMovieResponse
 
     @GET("movies/{movieId}")
     suspend fun getMovieById(

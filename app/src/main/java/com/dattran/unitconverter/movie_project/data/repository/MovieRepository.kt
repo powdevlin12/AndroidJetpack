@@ -22,6 +22,17 @@ class MovieRepository(
         }
     }
 
+    suspend fun createMovie(
+        movieForm: BodyUpdateMovie,
+    ): Result<UpdateMovieResponse> {
+        return try {
+            val response = apiService.createMovies(movie = movieForm)
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun getMovieById(movieId: String): Result<MovieByIdResponse> {
         // Sử dụng try-catch để xử lý ngoại lệ khi gọi API
         return try {
