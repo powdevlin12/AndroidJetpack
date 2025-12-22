@@ -8,16 +8,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.dattran.unitconverter.movie_project.ui.screens.create_movie.CreateMovieScreen
 import com.dattran.unitconverter.movie_project.ui.screens.home.HomeScreen
+import com.dattran.unitconverter.movie_project.ui.screens.register.Register
 import com.dattran.unitconverter.movie_project.ui.screens.update_movie.UpdateMovieScreen
 
 sealed class Screen(val route: String) {
+    object Register : Screen("register")
     object Home : Screen("home")
     object Detail : Screen("detail/{movieId}") {
         fun createRoute(movieId: Int) = "detail/$movieId"
     }
+
     object Create : Screen("create") {
         fun createRoute() = "create"
     }
+
     object Update : Screen("update/{movieId}") {
         fun createRoute(movieId: String) = "update/$movieId"
     }
@@ -31,6 +35,10 @@ fun NavGraph(
         navController = navController,
         startDestination = Screen.Home.route
     ) {
+        composable(Screen.Register.route) {
+            Register()
+        }
+
         composable(Screen.Home.route) {
             HomeScreen(
                 navController
