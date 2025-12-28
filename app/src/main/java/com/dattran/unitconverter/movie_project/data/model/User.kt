@@ -18,3 +18,13 @@ data class UserRegisterResponse(
     val message: String,
     val data: Token
 )
+
+data class UserLoginBody(
+    val email: String,
+    val password: String,
+)
+
+data class UserLoginResponse(
+    val message: String,
+    val data: Token
+)

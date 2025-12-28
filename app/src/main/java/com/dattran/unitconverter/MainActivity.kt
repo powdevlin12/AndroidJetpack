@@ -18,8 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.navigation.compose.rememberNavController
-import com.dattran.unitconverter.habit_tracking.ui.HabitScreen
-import com.dattran.unitconverter.habit_tracking.viewmodel.HabitViewModel
 import com.dattran.unitconverter.movie_project.navigation.NavGraph
 import com.dattran.unitconverter.mvvm.NavigationMVVM
 import dagger.hilt.android.AndroidEntryPoint

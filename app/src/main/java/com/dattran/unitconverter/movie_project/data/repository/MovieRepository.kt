@@ -5,6 +5,8 @@ import com.dattran.unitconverter.movie_project.data.model.DeleteMovieResponse
 import com.dattran.unitconverter.movie_project.data.model.MovieByIdResponse
 import com.dattran.unitconverter.movie_project.data.model.MovieResponse
 import com.dattran.unitconverter.movie_project.data.model.UpdateMovieResponse
+import com.dattran.unitconverter.movie_project.data.model.UserLoginBody
+import com.dattran.unitconverter.movie_project.data.model.UserLoginResponse
 import com.dattran.unitconverter.movie_project.data.model.UserRegisterBody
 import com.dattran.unitconverter.movie_project.data.model.UserRegisterResponse
 import com.dattran.unitconverter.movie_project.data.service.MovieApiService
@@ -73,6 +75,17 @@ class MovieRepository(
     ): Result<UserRegisterResponse> {
         return try {
             val response = apiService.register(user = userForm)
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun login(
+        userForm: UserLoginBody,
+    ): Result<UserLoginResponse> {
+        return try {
+            val response = apiService.login(user = userForm)
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
