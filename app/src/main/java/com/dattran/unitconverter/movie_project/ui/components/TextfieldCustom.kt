@@ -1,5 +1,6 @@
 package com.dattran.unitconverter.movie_project.ui.components
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -12,6 +13,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dattran.unitconverter.movie_project.constant.AppColor
@@ -34,8 +36,11 @@ fun TextFieldCustom(
         colors = TextFieldDefaults.colors(
             focusedContainerColor = AppColor.bgGray,   // Color when the text field is focused
             unfocusedContainerColor = AppColor.bgGray, // Color when unfocused
+            focusedIndicatorColor = Color.Transparent, // Removes the bottom border when focused
+            unfocusedIndicatorColor = Color.Transparent, // Removes the bottom border when unfocused
+            disabledIndicatorColor = Color.Transparent
         ),
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier.fillMaxWidth(),
         trailingIcon = trailingIcon
     )
 }
@@ -52,7 +57,7 @@ fun PreviewTFC() {
                 Icon(
                     imageVector = Icons.Default.Lock,
                     contentDescription = "Clear text",
-                    tint = AppColor.textBlue
+                    tint = AppColor.textBlue,
                 )
             }
         }

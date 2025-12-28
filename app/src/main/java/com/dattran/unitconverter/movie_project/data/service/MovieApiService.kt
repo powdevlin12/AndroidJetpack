@@ -6,6 +6,8 @@ import com.dattran.unitconverter.movie_project.data.model.Movie
 import com.dattran.unitconverter.movie_project.data.model.MovieByIdResponse
 import com.dattran.unitconverter.movie_project.data.model.MovieResponse
 import com.dattran.unitconverter.movie_project.data.model.UpdateMovieResponse
+import com.dattran.unitconverter.movie_project.data.model.UserRegisterBody
+import com.dattran.unitconverter.movie_project.data.model.UserRegisterResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
@@ -43,6 +45,12 @@ interface MovieApiService {
         @Path("id") movieId: String,
         @Body movie: BodyUpdateMovie
     ): UpdateMovieResponse
+
+    // authentication
+    @POST("users/register")
+    suspend fun register(
+        @Body user: UserRegisterBody,
+    ): UserRegisterResponse
 
     companion object {
         private const val BASE_URL = "http://10.0.2.2:1236/"
