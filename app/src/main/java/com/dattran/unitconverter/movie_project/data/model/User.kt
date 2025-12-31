@@ -28,3 +28,11 @@ data class UserLoginResponse(
     val message: String,
     val data: Token
 )
+
+data class UserLogoutBody(
+    val refreshToken: String
+)
+
+data class UserLogoutResponse(
+    val message: String
+)

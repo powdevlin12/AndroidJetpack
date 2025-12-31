@@ -1,6 +1,7 @@
 package com.dattran.unitconverter.movie_project.ui.screens.home
 
 import android.widget.Button
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,26 +29,32 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.dattran.unitconverter.movie_project.data.local.UserPreferences
 import com.dattran.unitconverter.movie_project.navigation.Screen
 import com.dattran.unitconverter.movie_project.ui.components.AlertCustom
 import com.dattran.unitconverter.movie_project.ui.components.MovieList
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: HomeViewModel = viewModel()
+    viewModel: HomeViewModel = viewModel(),
+    userPreferences: UserPreferences,
 ) {
     LaunchedEffect(Unit) {
         // Chạy 1 lần duy nhất khi composable được đưa vào Composition
         viewModel.setNavController(navController)
         viewModel.loadMovies()
     }
+
+    val scope = rememberCoroutineScope()
 
     // Biến StateFlow -> State
     val uiState by viewModel.uiState.collectAsState()
@@ -134,6 +141,14 @@ fun HomeScreen(
                     handleConfirm = { viewModel.onDeleteConfirm() }
                 )
             }
+            Text("Logout", modifier = Modifier.clickable {
+                scope.launch {
+                    userPreferences.clearLoginInfo()
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(0)
+                    }
+                }
+            })
         }
     }
 }

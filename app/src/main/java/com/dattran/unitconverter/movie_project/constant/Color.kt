@@ -7,5 +7,5 @@ object AppColor {
     val textSecondary = Color(0xFFBDBDBD)
     val bgGray = Color(0xD0E5E5E7)
     val textBlue = Color(0xFF5151C6)
-    val btnBlue = Color(0xFF888BF4)
+    val btnBlue = Color(0xFF082680)
 }

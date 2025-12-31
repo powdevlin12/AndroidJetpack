@@ -1,5 +1,6 @@
 package com.dattran.unitconverter.movie_project.data.repository
 
+import com.dattran.unitconverter.movie_project.data.local.UserPreferences
 import com.dattran.unitconverter.movie_project.data.model.BodyUpdateMovie
 import com.dattran.unitconverter.movie_project.data.model.DeleteMovieResponse
 import com.dattran.unitconverter.movie_project.data.model.MovieByIdResponse
@@ -12,7 +13,7 @@ import com.dattran.unitconverter.movie_project.data.model.UserRegisterResponse
 import com.dattran.unitconverter.movie_project.data.service.MovieApiService
 
 class MovieRepository(
-    private val apiService: MovieApiService
+    private val apiService: MovieApiService,
 ) {
     // suspend: Hàm có thể tạm dừng mà không block thread. Chỉ được gọi từ coroutine hoặc hàm suspend khác
     suspend fun getMovies(page: Int = 1): Result<MovieResponse> {

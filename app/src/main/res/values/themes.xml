@@ -2,4 +2,18 @@
 <resources>
 
     <style name="Theme.UnitConverter" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- ⭐ Splash Screen Theme -->
+    <style name="Theme.MovieApp.Starting" parent="Theme.SplashScreen">
+        <!-- Splash screen background color -->
+        <item name="windowSplashScreenBackground">@color/white</item>
+
+        <!-- Center icon/logo -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+
+        <!-- Icon size (optional) -->
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+
+        <item name="postSplashScreenTheme">@style/Theme.UnitConverter</item>
+    </style>
 </resources>

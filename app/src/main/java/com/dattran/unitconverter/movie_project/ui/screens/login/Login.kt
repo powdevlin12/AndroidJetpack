@@ -43,10 +43,10 @@ enum class FormField {
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: LoginViewModel = LoginViewModel(),
+    viewModel: LoginViewModel,
 ) {
     var email by remember { mutableStateOf("thudat@gmail.com") }
-    var password by remember { mutableStateOf("dat123") }
+    var password by remember { mutableStateOf("!Thudat123") }
 
     val uiState by viewModel.uiState.collectAsState()
 
@@ -97,10 +97,11 @@ fun LoginScreen(
                     text = "Đăng nhập",
                     onClick = {
                         viewModel.handleLogin(
-                            UserLoginBody(
+                            userForm = UserLoginBody(
                                 email = email,
                                 password = password,
-                            )
+                            ),
+                            navController
                         )
                     },
                     isLoading = uiState.isLoading

@@ -120,4 +120,10 @@ class HomeViewModel(
             )
         }
     }
+
+    fun handleLogout(callBack: () -> Unit) {
+        viewModelScope.launch {
+            callBack()
+        }
+    }
 }
