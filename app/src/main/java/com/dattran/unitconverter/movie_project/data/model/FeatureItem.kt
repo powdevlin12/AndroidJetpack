@@ -1,0 +1,19 @@
+package com.dattran.unitconverter.movie_project.data.model
+
+import androidx.compose.ui.graphics.Color
+
+data class FeatureItem(
+    val id: Int,
+    val title: String,
+    val icon: String,
+    val backgroundColor: Color,
+    val hasNewBadge: Boolean = false
+)
+
+data class UserStats(
+    val name: String,
+    val barcode: String,
+    val points: String,
+    val gifts: Int
+)
+

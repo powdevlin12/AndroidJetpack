@@ -12,6 +12,7 @@ import androidx.navigation.navArgument
 import com.dattran.unitconverter.movie_project.data.local.UserPreferences
 import com.dattran.unitconverter.movie_project.ui.screens.create_movie.CreateMovieScreen
 import com.dattran.unitconverter.movie_project.ui.screens.home.HomeScreen
+import com.dattran.unitconverter.movie_project.ui.screens.home_qtv.HomeQTV
 import com.dattran.unitconverter.movie_project.ui.screens.login.LoginScreen
 import com.dattran.unitconverter.movie_project.ui.screens.login.LoginViewModel
 import com.dattran.unitconverter.movie_project.ui.screens.register.Register
@@ -63,10 +64,11 @@ fun NavGraph(
         }
 
         composable(Screen.Home.route) {
-            HomeScreen(
-                navController,
-                userPreferences = userPreferences
-            )
+//            HomeScreen(
+//                navController,
+//                userPreferences = userPreferences
+//            )
+            HomeQTV(navController)
         }
 
         composable(Screen.Create.route) {
