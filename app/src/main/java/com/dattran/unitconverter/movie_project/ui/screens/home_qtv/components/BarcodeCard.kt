@@ -45,6 +45,7 @@ fun BarcodeCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
+                .padding(bottom = 24.dp)
             ,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

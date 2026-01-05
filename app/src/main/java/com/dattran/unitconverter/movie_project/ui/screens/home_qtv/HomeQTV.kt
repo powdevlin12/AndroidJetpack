@@ -1,18 +1,17 @@
 package com.dattran.unitconverter.movie_project.ui.screens.home_qtv
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -23,10 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.dattran.unitconverter.movie_project.ui.components.BottomSheetCustom
 import com.dattran.unitconverter.movie_project.ui.screens.home_qtv.components.BarcodeCard
+import com.dattran.unitconverter.movie_project.ui.screens.home_qtv.components.FeatureItemCard
 import com.dattran.unitconverter.movie_project.ui.screens.home_qtv.components.FeatureList
+import com.dattran.unitconverter.movie_project.ui.screens.home_qtv.components.PointAndGift
 import com.dattran.unitconverter.movie_project.ui.screens.home_qtv.components.PromotionSection
-import com.dattran.unitconverter.movie_project.ui.screens.home_qtv.components.StatsCard
 
 @Preview
 @Composable
@@ -43,9 +44,12 @@ fun HomeQTV(
     val features by viewModel.features.collectAsState()
     val banners by viewModel.banners.collectAsState()
 
+
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
+
         // Main Content
         Column(
             modifier = Modifier
@@ -81,41 +85,23 @@ fun HomeQTV(
                     .padding(horizontal = 16.dp)
                     .padding(bottom = 16.dp)
             )
-            Column(modifier = Modifier.fillMaxSize().background(color = Color.White).padding(bottom = 80.dp)) {
-                // Stats Cards Row
-                Row(
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .offset(y = (-36).dp)
+            ) {
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxSize()
                         .background(color = Color.White)
-                        .padding(horizontal = 16.dp, vertical = 24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        .padding(bottom = 80.dp)
                 ) {
-                    // Points Card
-                    StatsCard(
-                        value = userStats.points,
-                        unit = "điểm",
-                        label = "Xem lịch sử",
-                        emoji = "💰",
-                        backgroundColor = Color(0xFFFFF9E6),
-                        borderColor = Color(0xFFFFCC00),
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    // Gifts Card
-                    StatsCard(
-                        value = userStats.gifts.toString(),
-                        unit = "quà tặng",
-                        label = "Xem quà",
-                        emoji = "🎁",
-                        backgroundColor = Color(0xFFFFF0F0),
-                        borderColor = Color(0xFFFFCC00),
-                        modifier = Modifier.weight(1f)
-                    )
+                    // Stats Cards Row
+                    PointAndGift(userStats)
+                    FeatureList(features)
+                    PromotionSection(banners)
+                    PromotionSection(banners)
                 }
-
-                FeatureList(features)
-                PromotionSection(banners)
-                PromotionSection(banners)
             }
         }
     }

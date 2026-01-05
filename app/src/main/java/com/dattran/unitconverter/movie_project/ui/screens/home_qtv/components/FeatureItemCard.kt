@@ -1,6 +1,8 @@
 package com.dattran.unitconverter.movie_project.ui.screens.home_qtv.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -24,7 +27,8 @@ import com.dattran.unitconverter.movie_project.data.model.FeatureItem
 @Composable
 fun FeatureItemCard(
     feature: FeatureItem,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     Box(
         modifier = modifier,
@@ -38,12 +42,16 @@ fun FeatureItemCard(
                 modifier = Modifier
                     .size(48.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .background(feature.backgroundColor),
+                    .background(feature.backgroundColor)
+                    .clickable(
+                        onClick = onClick
+                    ),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = feature.icon,
-                    fontSize = 28.sp
+                Image(
+                    painter = painterResource(id = feature.icon),
+                    contentDescription = feature.title,
+                    modifier = Modifier.size(30.dp)
                 )
             }
 
@@ -51,14 +59,14 @@ fun FeatureItemCard(
 
             Text(
                 text = feature.title,
-                fontSize = 12.sp,
-                color = Color(0xFF1A1A1A),
+                fontSize = 14.sp,
+                color = Color(0xFF222222),
                 textAlign = TextAlign.Center,
-                lineHeight = 15.sp,
+                lineHeight = (14 * 1.5).sp,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(36.dp)
+                    .height(40.dp)
             )
         }
 

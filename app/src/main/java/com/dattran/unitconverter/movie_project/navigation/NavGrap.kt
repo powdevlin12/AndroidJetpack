@@ -53,7 +53,7 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = Screen.Home.route
     ) {
         composable(Screen.Login.route) {
             LoginScreen(navController, viewModel = loginViewModel)

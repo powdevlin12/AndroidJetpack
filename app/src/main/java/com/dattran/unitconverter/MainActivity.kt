@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
         keepSplashScreen = false
 
         setContent {
-            setStatusBarColor(color = Color.Red)
+            setStatusBarColor(color = Color(0xFFFFE4E1))
             Scaffold { paddingValues ->
                 Box(
                     modifier = Modifier

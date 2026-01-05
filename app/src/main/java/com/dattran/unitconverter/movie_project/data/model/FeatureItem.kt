@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 data class FeatureItem(
     val id: Int,
     val title: String,
-    val icon: String,
+    val icon: Int,
     val backgroundColor: Color,
     val hasNewBadge: Boolean = false
 )
