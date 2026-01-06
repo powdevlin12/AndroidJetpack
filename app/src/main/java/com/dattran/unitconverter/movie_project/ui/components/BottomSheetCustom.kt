@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
@@ -54,7 +55,7 @@ fun BottomSheetCustom(
                 Icon(
                     imageVector = Icons.Outlined.Close,
                     contentDescription = null,
-                    modifier = Modifier.clickable(
+                    modifier = Modifier.offset(y = (-2).dp).clickable(
                         onClick = onDismiss
                     )
                 )
