@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dattran.unitconverter.movie_project.data.model.FeatureItem
 import com.dattran.unitconverter.movie_project.ui.components.BottomSheetCustom
+import com.dattran.unitconverter.movie_project.ui.components.TestNotification
 
 @Composable
 fun FeatureList(
@@ -37,18 +38,21 @@ fun FeatureList(
                 onDismiss = { showMoreFeature = false },
                 onSetShowSheet = { showMoreFeature = it },
                 content = {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        features.take(4).forEach { feature ->
-                            FeatureItemCard(
-                                feature = feature,
-                                modifier = Modifier.weight(1f)
-                            )
+                    Column {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            features.take(4).forEach { feature ->
+                                FeatureItemCard(
+                                    feature = feature,
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
                         }
+                        TestNotification()
                     }
                 }
             )

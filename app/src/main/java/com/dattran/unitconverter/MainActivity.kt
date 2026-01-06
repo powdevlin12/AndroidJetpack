@@ -63,11 +63,49 @@ class MainActivity : ComponentActivity() {
                         .padding(paddingValues)
                 ) {
                     val navController = rememberNavController()
+
+                    // ⭐ XỬ LÝ DEEPLINK
+                    LaunchedEffect(intent) {
+                        handleDeepLink(intent, navController)
+                    }
+
                     NavGraph(
                         navController = navController,
                         userPreferences = userPreferences,
                         loginViewModel = loginViewModel
                     )
+                }
+            }
+        }
+    }
+
+    // ⭐ Xử lý khi có intent mới (khi app đang chạy)
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+    }
+
+    // ⭐ Hàm xử lý deeplink
+    private fun handleDeepLink(
+        intent: android.content.Intent?,
+        navController: androidx.navigation.NavHostController
+    ) {
+        val data = intent?.data
+        if (data != null && data.scheme == "loyaltyapp") {
+            when (data.host) {
+                "main" -> {
+                    // loyaltyapp://main/register
+                    val path = data.pathSegments.firstOrNull()
+                    when (path) {
+                        "register" -> navController.navigate("register") {
+                            launchSingleTop = true
+                        }
+
+                        "login" -> navController.navigate("login") {
+                            launchSingleTop = true
+                        }
+                        // Thêm các path khác nếu cần
+                    }
                 }
             }
         }

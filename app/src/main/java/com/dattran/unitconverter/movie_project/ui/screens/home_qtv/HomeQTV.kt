@@ -1,9 +1,13 @@
 package com.dattran.unitconverter.movie_project.ui.screens.home_qtv
 
+import android.Manifest
+import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -27,6 +31,10 @@ import com.dattran.unitconverter.movie_project.ui.screens.home_qtv.components.Ba
 import com.dattran.unitconverter.movie_project.ui.screens.home_qtv.components.FeatureList
 import com.dattran.unitconverter.movie_project.ui.screens.home_qtv.components.PointAndGift
 import com.dattran.unitconverter.movie_project.ui.screens.home_qtv.components.PromotionSection
+import com.dattran.unitconverter.movie_project.utils.NotificationHelper
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
 @Preview(showBackground = true)
 @Composable

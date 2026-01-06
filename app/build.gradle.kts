@@ -84,4 +84,6 @@ dependencies {
     // ⭐ DataStore - Lưu token/session (Recommend!)
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("androidx.core:core-splashscreen:1.0.1")
+    // Accompanist Permissions (cho runtime permission)
+    implementation("com.google.accompanist:accompanist-permissions:0.32.0")
 }
