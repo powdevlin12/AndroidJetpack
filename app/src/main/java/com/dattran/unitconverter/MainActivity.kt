@@ -21,6 +21,7 @@ import com.dattran.unitconverter.social.data.local.AppDatabase
 import com.dattran.unitconverter.social.data.local.UserPreferences
 import com.dattran.unitconverter.social.navigation.NavGraph
 import com.dattran.unitconverter.social.ui.screens.login.LoginViewModel
+import com.dattran.unitconverter.social.ui.screens.profile.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,6 +29,7 @@ class MainActivity : ComponentActivity() {
     // ⭐ Initialize dependencies
     private lateinit var userPreferences: UserPreferences
     private lateinit var loginViewModel: LoginViewModel
+    private lateinit var profileViewModel: ProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +55,7 @@ class MainActivity : ComponentActivity() {
         val userDao = database.userDao()
 
         loginViewModel = LoginViewModel(userPreferences, userDao)
+        profileViewModel = ProfileViewModel(userDao = userDao)
         // ⭐ BƯỚC 3: Sau khi load xong, ẩn splash
         keepSplashScreen = false
 
@@ -74,7 +77,8 @@ class MainActivity : ComponentActivity() {
                     NavGraph(
                         navController = navController,
                         userPreferences = userPreferences,
-                        loginViewModel = loginViewModel
+                        loginViewModel = loginViewModel,
+                        profileViewModel = profileViewModel
                     )
                 }
             }

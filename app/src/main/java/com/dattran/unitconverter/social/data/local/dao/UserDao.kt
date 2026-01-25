@@ -16,4 +16,7 @@ interface UserDao {
     // Get user information by ID
     @Query("SELECT * FROM user_info WHERE id = :userId LIMIT 1")
     fun getUserById(userId: Int): Flow<UserEntity?>
+
+    @Query("SELECT * FROM user_info LIMIT 1")
+    suspend fun getUserLocal(): UserEntity?
 }

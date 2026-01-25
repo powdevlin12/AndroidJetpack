@@ -17,6 +17,7 @@ import com.dattran.unitconverter.social.ui.screens.home_qtv.HomeQTV
 import com.dattran.unitconverter.social.ui.screens.login.LoginScreen
 import com.dattran.unitconverter.social.ui.screens.login.LoginViewModel
 import com.dattran.unitconverter.social.ui.screens.profile.ProfileScreen
+import com.dattran.unitconverter.social.ui.screens.profile.ProfileViewModel
 import com.dattran.unitconverter.social.ui.screens.register.Register
 import com.dattran.unitconverter.social.ui.screens.update_movie.UpdateMovieScreen
 import kotlinx.coroutines.flow.first
@@ -45,7 +46,8 @@ sealed class Screen(val route: String) {
 fun NavGraph(
     navController: NavHostController,
     userPreferences: UserPreferences,
-    loginViewModel: LoginViewModel
+    loginViewModel: LoginViewModel,
+    profileViewModel: ProfileViewModel
 ) {
     // ⭐ Get current route để biết có hiển thị BottomNavigationBar không
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
@@ -85,7 +87,7 @@ fun NavGraph(
 
         composable(Screen.Profile.route) {
             MainScreen(navController, currentRoute) {
-                ProfileScreen(navController)
+                ProfileScreen(navController, viewModel = profileViewModel)
             }
         }
 
