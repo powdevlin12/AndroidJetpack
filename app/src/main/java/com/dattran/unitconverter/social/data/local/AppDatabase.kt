@@ -10,7 +10,7 @@ import com.dattran.unitconverter.social.data.local.entity.UserEntity
 // ⭐ @Database annotation
 @Database(
     entities = [UserEntity::class], // ⭐ List of entities
-    version = 2, // ⭐ Database version (incremented due to id type change)
+    version = 3, // ⭐ Database version (incremented due to schema change)
     exportSchema = false // ⭐ Don't export schema
 )
 //@TypeConverters(TypeConverters::class) // ⭐ Type converters (nếu có)

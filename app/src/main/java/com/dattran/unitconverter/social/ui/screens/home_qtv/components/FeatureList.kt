@@ -37,25 +37,24 @@ fun FeatureList(
                 title = "Tiện ích khác",
                 onDismiss = { showMoreFeature = false },
                 onSetShowSheet = { showMoreFeature = it },
-                content = {
-                    Column {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 16.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            features.take(4).forEach { feature ->
-                                FeatureItemCard(
-                                    feature = feature,
-                                    modifier = Modifier.weight(1f)
-                                )
-                            }
+            ) {
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        features.take(4).forEach { feature ->
+                            FeatureItemCard(
+                                feature = feature,
+                                modifier = Modifier.weight(1f)
+                            )
                         }
-                        TestNotification()
                     }
+                    TestNotification()
                 }
-            )
+            }
         }
         // Tiện ích section
         Text(

@@ -9,6 +9,7 @@ import com.dattran.unitconverter.social.data.local.entity.UserEntity
 import com.dattran.unitconverter.social.data.model.UserLoginBody
 import com.dattran.unitconverter.social.data.repository.MovieRepository
 import com.dattran.unitconverter.social.data.repository.UserRepository
+import com.dattran.unitconverter.social.data.service.AuthApiService
 import com.dattran.unitconverter.social.data.service.MovieApiService
 import com.dattran.unitconverter.social.navigation.Screen
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +29,7 @@ class LoginViewModel(
     private val _uiState = MutableStateFlow(LoginState())
     val uiState: StateFlow<LoginState> = _uiState.asStateFlow()
     private val repository = MovieRepository(MovieApiService.create())
-    private val userInfoRepository = UserRepository(userDao = userDao)
+    private val userInfoRepository = UserRepository(userDao = userDao, AuthApiService.create())
 
     fun onChangeStateLoading(loading: Boolean) {
         _uiState.value = _uiState.value.copy(
@@ -86,7 +87,16 @@ class LoginViewModel(
                                 id = userInfo._id,
                                 name = userInfo.name,
                                 email = userInfo.email,
-                                avatar = userInfo.avatar
+                                avatar = userInfo.avatar,
+                                bio = userInfo.bio,
+                                website = userInfo.website,
+                                location = userInfo.location,
+                                dateOfBirth = userInfo.date_of_birth,
+                                refreshToken = response.data.refreshToken,
+                                accessToken = response.data.accessToken,
+                                verify = userInfo.verify,
+                                createdAt = userInfo.created_at,
+                                updatedAt = userInfo.updated_at
                             )
 
                             viewModelScope.launch {

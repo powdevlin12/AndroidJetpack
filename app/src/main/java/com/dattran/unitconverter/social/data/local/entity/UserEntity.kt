@@ -22,4 +22,31 @@ data class UserEntity(
 
     @ColumnInfo(name = "avatar", defaultValue = "")
     val avatar: String?,
+
+    @ColumnInfo(name = "bio", defaultValue = "")
+    val bio: String?,
+
+    @ColumnInfo(name = "website", defaultValue = "")
+    val website: String?,
+
+    @ColumnInfo(name = "date_of_birth", defaultValue = "")
+    val dateOfBirth: String?,
+
+    @ColumnInfo(name = "created_at", defaultValue = "")
+    val createdAt: String?,
+
+    @ColumnInfo(name = "updated_at", defaultValue = "")
+    val updatedAt: String?,
+
+    @ColumnInfo(name = "verify", defaultValue = "0")
+    val verify: Int,
+
+    @ColumnInfo(name = "location", defaultValue = "")
+    val location: String?,
+
+    @ColumnInfo(name = "accessToken", defaultValue = "")
+    val accessToken: String?,
+
+    @ColumnInfo(name = "refreshToken", defaultValue = "")
+    val refreshToken: String?,
 )

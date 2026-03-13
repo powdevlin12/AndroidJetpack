@@ -20,17 +20,13 @@ import androidx.navigation.compose.rememberNavController
 import com.dattran.unitconverter.social.data.local.AppDatabase
 import com.dattran.unitconverter.social.data.local.UserPreferences
 import com.dattran.unitconverter.social.navigation.NavGraph
+import com.dattran.unitconverter.social.ui.screens.edit_profile.EditProfileViewModel
 import com.dattran.unitconverter.social.ui.screens.login.LoginViewModel
 import com.dattran.unitconverter.social.ui.screens.profile.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    // ⭐ Initialize dependencies
-    private lateinit var userPreferences: UserPreferences
-    private lateinit var loginViewModel: LoginViewModel
-    private lateinit var profileViewModel: ProfileViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -48,19 +44,20 @@ class MainActivity : ComponentActivity() {
 //                android.graphics.Color.TRANSPARENT,
 //            )
         )
-        userPreferences = UserPreferences(applicationContext)
 
+        val userPreferences = UserPreferences(applicationContext)
         // ⭐ Get database instance and UserDao
         val database = AppDatabase.getDatabase(applicationContext)
         val userDao = database.userDao()
 
-        loginViewModel = LoginViewModel(userPreferences, userDao)
-        profileViewModel = ProfileViewModel(userDao = userDao)
+        val loginViewModel = LoginViewModel(userPreferences, userDao)
+        val profileViewModel = ProfileViewModel(userDao = userDao)
+        val editProfileViewModel = EditProfileViewModel(userDao = userDao)
         // ⭐ BƯỚC 3: Sau khi load xong, ẩn splash
         keepSplashScreen = false
 
         setContent {
-            setStatusBarColor(color = Color(0xFFFFE4E1))
+            setStatusBarColor(color = Color(0xFFFFFFFF))
             Scaffold { paddingValues ->
                 Box(
                     modifier = Modifier
@@ -78,7 +75,8 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         userPreferences = userPreferences,
                         loginViewModel = loginViewModel,
-                        profileViewModel = profileViewModel
+                        profileViewModel = profileViewModel,
+                        editProfileViewModel = editProfileViewModel
                     )
                 }
             }

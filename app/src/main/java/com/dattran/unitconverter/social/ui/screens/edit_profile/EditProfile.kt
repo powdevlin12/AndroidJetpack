@@ -1,6 +1,7 @@
 package com.dattran.unitconverter.social.ui.screens.edit_profile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,16 +26,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dattran.unitconverter.social.ui.components.ButtonCustom
@@ -49,24 +49,11 @@ enum class FormField {
 }
 
 @Composable
-fun EditProfileScren() {
-    var name by remember { mutableStateOf("") }
-    var bio by remember { mutableStateOf("") }
-    var website by remember { mutableStateOf("") }
-    var location by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-
-    fun updateField(field: FormField, value: String) {
-        when (field) {
-            FormField.NAME -> name = value
-            FormField.BIO -> bio = value
-            FormField.WEBSITE -> website = value
-            FormField.LOCATION -> location = value
-            FormField.EMAIL -> email = value
-        }
-    }
+fun EditProfileScreen(viewModel: EditProfileViewModel) {
+    val uiState by viewModel.uiState.collectAsState()
 
     val scrollState = rememberScrollState()
+    val focusManager = LocalFocusManager.current
 
     Scaffold { padding ->
         Column(
@@ -75,6 +62,9 @@ fun EditProfileScren() {
                 .fillMaxSize()
                 .background(Color(0xFFF8FAFC))
                 .padding(padding)
+                .pointerInput(Unit) {
+                    detectTapGestures(onPress = { focusManager.clearFocus() })
+                }
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -98,7 +88,7 @@ fun EditProfileScren() {
                     .padding(top = 24.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
-                Box() {
+                Box {
                     Icon(
                         Icons.Default.AccountCircle,
                         contentDescription = "",
@@ -107,7 +97,6 @@ fun EditProfileScren() {
                             .height(100.dp),
                         tint = Color.LightGray
                     )
-
                     Icon(
                         Icons.Default.CameraAlt,
                         contentDescription = "",
@@ -134,17 +123,20 @@ fun EditProfileScren() {
             }
 
             InputEditProfile(
-                name = name,
-                bio = bio,
-                website = website,
-                location = location,
-                email = email,
-                onFieldChange = ::updateField
+                name = uiState.name,
+                bio = uiState.bio,
+                website = uiState.website,
+                location = uiState.location,
+                email = uiState.email,
+                onFieldChange = viewModel::onFieldChange
             )
             Spacer(modifier = Modifier.height(20.dp))
             ButtonCustom(
                 text = "Save changes",
-                onClick = {},
+                isLoading = uiState.isLoading,
+                onClick = {
+                    viewModel.updateUser()
+                },
                 modifier = Modifier
                     .height(56.dp)
                     .padding(horizontal = 16.dp)
@@ -171,8 +163,7 @@ fun InputEditProfile(
     )
 
     Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp),
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         fields.forEach { (field, label, value) ->
             Spacer(modifier = Modifier.height(16.dp))
@@ -201,8 +192,3 @@ fun InputEditProfile(
     }
 }
 
-@Preview
-@Composable
-fun Preview() {
-    EditProfileScren()
-}

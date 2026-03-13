@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-12-19T16:09:46.391347Z">
+        <DropdownSelection timestamp="2026-03-08T03:23:15.692358Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="Default" identifier="serial=192.168.1.2:39451;connection=96cfc929" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/tranthudat/.android/avd/Cover_ZFold_3.avd" />
             </handle>
           </Target>
         </DropdownSelection>

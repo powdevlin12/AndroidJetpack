@@ -29,6 +29,15 @@ data class UserLoginResponse(
     val data: Token
 )
 
+data class UserUpdateBody(
+    val name: String?,
+    val email: String?,
+    val avatar: String?,
+    val website: String?,
+    val location: String?,
+    val bio: String?,
+)
+
 data class UserLogoutBody(
     val refreshToken: String
 )
@@ -45,7 +54,10 @@ data class UserInfo(
     val created_at: String?,
     val updated_at: String?,
     val avatar: String?,
-    val verify: Int?
+    val website: String?,
+    val location: String?,
+    val verify: Int,
+    val bio: String?,
 )
 
 data class GetMeResponse(

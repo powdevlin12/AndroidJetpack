@@ -1,7 +1,8 @@
 package com.dattran.unitconverter.social.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -13,6 +14,8 @@ import com.dattran.unitconverter.social.ui.screens.MainScreen
 import com.dattran.unitconverter.social.ui.screens.cart.CartScreen
 import com.dattran.unitconverter.social.ui.screens.category.CategoryScreen
 import com.dattran.unitconverter.social.ui.screens.create_movie.CreateMovieScreen
+import com.dattran.unitconverter.social.ui.screens.edit_profile.EditProfileScreen
+import com.dattran.unitconverter.social.ui.screens.edit_profile.EditProfileViewModel
 import com.dattran.unitconverter.social.ui.screens.home_qtv.HomeQTV
 import com.dattran.unitconverter.social.ui.screens.login.LoginScreen
 import com.dattran.unitconverter.social.ui.screens.login.LoginViewModel
@@ -20,7 +23,6 @@ import com.dattran.unitconverter.social.ui.screens.profile.ProfileScreen
 import com.dattran.unitconverter.social.ui.screens.profile.ProfileViewModel
 import com.dattran.unitconverter.social.ui.screens.register.Register
 import com.dattran.unitconverter.social.ui.screens.update_movie.UpdateMovieScreen
-import kotlinx.coroutines.flow.first
 
 sealed class Screen(val route: String) {
     object Register : Screen("register")
@@ -29,6 +31,7 @@ sealed class Screen(val route: String) {
     object Category : Screen("category")
     object Cart : Screen("cart")
     object Profile : Screen("profile")
+    object EditProfile : Screen("edit-profile")
     object Detail : Screen("detail/{movieId}") {
         fun createRoute(movieId: Int) = "detail/$movieId"
     }
@@ -47,14 +50,17 @@ fun NavGraph(
     navController: NavHostController,
     userPreferences: UserPreferences,
     loginViewModel: LoginViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    editProfileViewModel: EditProfileViewModel
 ) {
     // ⭐ Get current route để biết có hiển thị BottomNavigationBar không
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry.value?.destination?.route
+    val isAuth by userPreferences.isAuth.collectAsStateWithLifecycle(initialValue = false)
 
     NavHost(
         navController = navController,
+//        startDestination = if (isAuth == null || isAuth == false) Screen.Login.route else Screen.Home.route
         startDestination = Screen.Login.route
     ) {
         // Màn hình không có BottomNavigationBar
@@ -89,6 +95,10 @@ fun NavGraph(
             MainScreen(navController, currentRoute) {
                 ProfileScreen(navController, viewModel = profileViewModel)
             }
+        }
+
+        composable(Screen.EditProfile.route) {
+            EditProfileScreen(viewModel = editProfileViewModel)
         }
 
         composable(Screen.Create.route) {

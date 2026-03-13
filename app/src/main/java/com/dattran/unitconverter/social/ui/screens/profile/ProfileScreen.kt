@@ -22,6 +22,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.dattran.unitconverter.Screen
+import com.dattran.unitconverter.social.ui.components.BottomSheetCustom
 
 @Composable
 fun ProfileScreen(
@@ -30,6 +32,12 @@ fun ProfileScreen(
 ) {
     var selectedTab by remember { mutableStateOf(0) }
     val uiState by viewModel.uiState.collectAsState()
+    var showSetting by remember { mutableStateOf(false) }
+
+    fun handleShowSetting() {
+        // Handle showing settings
+        showSetting = true
+    }
 
     LaunchedEffect(Unit) {
         viewModel.handleGetUserDataLocal()
@@ -41,7 +49,7 @@ fun ProfileScreen(
             .background(Color(0xFFF5F7F8))
     ) {
         // Top App Bar
-        ProfileTopBar(username = uiState.profileDataLocal?.email ?: "username")
+        ProfileTopBar(username = uiState.profileDataLocal?.email ?: "username", ::handleShowSetting)
 
         // Scrollable Content
         Column(
@@ -50,34 +58,77 @@ fun ProfileScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             // Profile Header Section
-            ProfileHeader(name = uiState.profileDataLocal?.name ?: "Name")
+            ProfileHeader(
+                name = uiState.profileDataLocal?.name ?: "Name",
+                navController = navController
+            )
 
             // Content Tabs
             ProfileTabs(
-                selectedTab = selectedTab,
-                onTabSelected = { selectedTab = it }
-            )
+                selectedTab = selectedTab, onTabSelected = { selectedTab = it })
 
             // Grid Content
             PhotoGrid()
 
             // Spacing for bottom nav
             Spacer(modifier = Modifier.height(16.dp))
+
+            if (showSetting) {
+                BottomSheetCustom(
+                    title = "Account Settings",
+                    onDismiss = { showSetting = false },
+                    onSetShowSheet = { showSetting = it },
+                    content = {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+
+                            // Add more settings options here
+                            Text(
+                                text = "Privacy",
+                                fontSize = 14.sp,
+                                color = Color(0xFF496C9C),
+                            )
+                            Text(
+                                text = "Logout",
+                                fontSize = 14.sp,
+                                color = Color(0xFF496C9C),
+                                modifier = Modifier.clickable {
+
+                                }
+                            )
+                        }
+                    })
+            }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ProfileTopBar(
-    username: String
+    username: String, onShowSetting: () -> Unit
 ) {
-    TopAppBar(
-        title = {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp), color = Color(0xFFF5F7F8)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Left placeholder for spacing
+            Spacer(modifier = Modifier.width(48.dp))
+
+            // Center - Username with verified badge
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.weight(1f)
             ) {
                 Text(
                     text = username,
@@ -93,29 +144,27 @@ private fun ProfileTopBar(
                     modifier = Modifier.size(18.dp)
                 )
             }
-        },
-        navigationIcon = {
-            // Placeholder for spacing
-            Spacer(modifier = Modifier.width(48.dp))
-        },
-        actions = {
-            IconButton(onClick = { /* Settings */ }) {
+
+            // Right - Settings button
+            IconButton(
+                onClick = {
+                    onShowSetting()
+                }, modifier = Modifier.size(48.dp)
+            ) {
                 Icon(
                     imageVector = Icons.Default.Settings,
                     contentDescription = "Settings",
                     tint = Color(0xFF0D131C)
                 )
             }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(0xFFF5F7F8)
-        )
-    )
+        }
+    }
 }
 
 @Composable
 private fun ProfileHeader(
-    name: String
+    name: String,
+    navController: NavController,
 ) {
     Column(
         modifier = Modifier
@@ -132,8 +181,7 @@ private fun ProfileHeader(
         ) {
             // Avatar with gradient border
             Box(
-                modifier = Modifier.size(96.dp),
-                contentAlignment = Alignment.BottomEnd
+                modifier = Modifier.size(96.dp), contentAlignment = Alignment.BottomEnd
             ) {
                 Box(
                     modifier = Modifier
@@ -141,11 +189,9 @@ private fun ProfileHeader(
                         .background(
                             brush = Brush.linearGradient(
                                 colors = listOf(
-                                    Color(0xFF257BF4),
-                                    Color(0xFF60A5FA)
+                                    Color(0xFF257BF4), Color(0xFF60A5FA)
                                 )
-                            ),
-                            shape = CircleShape
+                            ), shape = CircleShape
                         )
                         .padding(3.dp)
                 ) {
@@ -199,8 +245,7 @@ private fun ProfileHeader(
 
         // Name & Bio
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
                 text = name,
@@ -274,7 +319,9 @@ private fun ProfileHeader(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Button(
-                onClick = { /* Edit Profile */ },
+                onClick = {
+                    navController.navigate(com.dattran.unitconverter.social.navigation.Screen.EditProfile.route)
+                },
                 modifier = Modifier
                     .weight(1f)
                     .height(40.dp),
@@ -284,9 +331,7 @@ private fun ProfileHeader(
                 shape = RoundedCornerShape(20.dp)
             ) {
                 Text(
-                    text = "Edit Profile",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
+                    text = "Edit Profile", fontSize = 14.sp, fontWeight = FontWeight.Bold
                 )
             }
 
@@ -332,10 +377,7 @@ private fun StatItem(value: String, label: String) {
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         Text(
-            text = value,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF0D131C)
+            text = value, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color(0xFF0D131C)
         )
         Text(
             text = label,
@@ -348,8 +390,7 @@ private fun StatItem(value: String, label: String) {
 
 @Composable
 private fun ProfileTabs(
-    selectedTab: Int,
-    onTabSelected: (Int) -> Unit
+    selectedTab: Int, onTabSelected: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -380,10 +421,7 @@ private fun ProfileTabs(
 
 @Composable
 private fun TabItem(
-    icon: ImageVector,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    icon: ImageVector, isSelected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
@@ -448,8 +486,7 @@ private fun PhotoGrid() {
             ) {
                 rowPhotos.forEach { photo ->
                     PhotoGridItem(
-                        photo = photo,
-                        modifier = Modifier.weight(1f)
+                        photo = photo, modifier = Modifier.weight(1f)
                     )
                 }
             }
@@ -460,15 +497,13 @@ private fun PhotoGrid() {
 
 @Composable
 private fun PhotoGridItem(
-    photo: PhotoItem,
-    modifier: Modifier = Modifier
+    photo: PhotoItem, modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
             .aspectRatio(1f)
             .background(Color(0xFFE2E8F0))
-            .clickable { /* Open photo */ }
-    ) {
+            .clickable { /* Open photo */ }) {
         // Placeholder background
         Box(
             modifier = Modifier
@@ -476,8 +511,7 @@ private fun PhotoGridItem(
                 .background(
                     brush = Brush.linearGradient(
                         colors = listOf(
-                            Color(0xFFCBD5E1),
-                            Color(0xFF94A3B8)
+                            Color(0xFFCBD5E1), Color(0xFF94A3B8)
                         )
                     )
                 )
@@ -499,7 +533,6 @@ private fun PhotoGridItem(
 }
 
 private data class PhotoItem(
-    val hasMultiple: Boolean = false,
-    val hasVideo: Boolean = false
+    val hasMultiple: Boolean = false, val hasVideo: Boolean = false
 )
 
