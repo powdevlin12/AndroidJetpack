@@ -2,13 +2,12 @@ package com.dattran.unitconverter.social.data.repository
 
 import com.dattran.unitconverter.social.data.local.dao.UserDao
 import com.dattran.unitconverter.social.data.local.entity.UserEntity
-import com.dattran.unitconverter.social.data.model.UserLoginResponse
 import com.dattran.unitconverter.social.data.model.UserLogoutBody
 import com.dattran.unitconverter.social.data.model.UserLogoutResponse
 import com.dattran.unitconverter.social.data.model.UserUpdateBody
 import com.dattran.unitconverter.social.data.service.AuthApiService
-import com.dattran.unitconverter.social.data.service.MovieApiService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 class UserRepository(
     private val userDao: UserDao,
@@ -18,23 +17,36 @@ class UserRepository(
         userDao.insertUser(user)
     }
 
-    // ⭐ Query
-    suspend fun getUserById(userId: Int): Flow<UserEntity?> {
-        return userDao.getUserById(userId)
-    }
-
-    // ⭐ Query
-    suspend fun getUserLocal(): UserEntity? {
+    // ⭐ Query — trả về Flow, UI tự cập nhật khi DB thay đổi
+    fun getUserLocal(): Flow<UserEntity?> {
         return userDao.getUserLocal()
     }
 
     // ⭐ Patch
     suspend fun updateUser(userUpdate: UserUpdateBody) {
-        val user = userDao.getUserLocal()
+        val user = userDao.getUserLocal().first()  // lấy snapshot hiện tại
         apiService.update(
             authorization = "Bearer " + (user?.accessToken ?: ""),
             userId = user?.id ?: "",
             user = userUpdate
+        )
+    }
+
+
+    // ⭐ Chỉ update các field profile, giữ nguyên accessToken, refreshToken, avatar, ...
+    suspend fun updateProfileFieldsLocal(
+        name: String,
+        bio: String,
+        website: String,
+        location: String,
+        email: String,
+    ) {
+        userDao.updateProfileFields(
+            name = name,
+            bio = bio,
+            website = website,
+            location = location,
+            email = email,
         )
     }
 

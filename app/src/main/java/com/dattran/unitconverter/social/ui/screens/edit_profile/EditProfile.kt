@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.dattran.unitconverter.social.ui.components.ButtonCustom
 import com.dattran.unitconverter.social.ui.screens.edit_profile.components.LabelInput
 
@@ -49,7 +50,7 @@ enum class FormField {
 }
 
 @Composable
-fun EditProfileScreen(viewModel: EditProfileViewModel) {
+fun EditProfileScreen(viewModel: EditProfileViewModel, navController: NavHostController) {
     val uiState by viewModel.uiState.collectAsState()
 
     val scrollState = rememberScrollState()
@@ -71,7 +72,9 @@ fun EditProfileScreen(viewModel: EditProfileViewModel) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TextButton(onClick = {}) {
+                TextButton(onClick = {
+                    navController.popBackStack()
+                }) {
                     Text("Cancel", fontSize = 16.sp, color = Color(0xFF64748B))
                 }
                 Text(

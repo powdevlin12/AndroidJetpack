@@ -10,6 +10,7 @@ import com.dattran.unitconverter.social.data.service.AuthApiService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -38,7 +39,8 @@ class EditProfileViewModel(
     fun loadUserData() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            val user = userInfoRepository.getUserLocal()
+            val user =
+                userInfoRepository.getUserLocal().first()  // ⭐ .first() để lấy snapshot từ Flow
             if (user != null) {
                 _uiState.update { state ->
                     state.copy(
@@ -73,6 +75,7 @@ class EditProfileViewModel(
             _uiState.update { it.copy(isLoading = true) }
             try {
                 Log.d("EditProfileViewModel", "updateUser: calling API...")
+                // ⭐ Bước 1: Gọi API update — nếu thất bại sẽ throw exception, không chạy tiếp
                 userInfoRepository.updateUser(
                     UserUpdateBody(
                         name = uiState.value.name,
@@ -82,6 +85,15 @@ class EditProfileViewModel(
                         email = uiState.value.email,
                         avatar = ""
                     )
+                )
+                // ⭐ Bước 2: API thành công → mới update local, chỉ update các field profile
+                // Tương tự spread operator {...user, name, bio, ...} trong JS
+                userInfoRepository.updateProfileFieldsLocal(
+                    name = uiState.value.name,
+                    bio = uiState.value.bio,
+                    website = uiState.value.website,
+                    location = uiState.value.location,
+                    email = uiState.value.email,
                 )
                 Log.d("EditProfileViewModel", "updateUser: success!")
                 _uiState.update { it.copy(isLoading = false) }

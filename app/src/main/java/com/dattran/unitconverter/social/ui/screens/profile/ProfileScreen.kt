@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.dattran.unitconverter.Screen
+import com.dattran.unitconverter.social.data.local.entity.UserEntity
 import com.dattran.unitconverter.social.ui.components.BottomSheetCustom
 
 @Composable
@@ -37,10 +38,6 @@ fun ProfileScreen(
     fun handleShowSetting() {
         // Handle showing settings
         showSetting = true
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.handleGetUserDataLocal()
     }
 
     Column(
@@ -59,7 +56,7 @@ fun ProfileScreen(
         ) {
             // Profile Header Section
             ProfileHeader(
-                name = uiState.profileDataLocal?.name ?: "Name",
+                user = uiState.profileDataLocal,
                 navController = navController
             )
 
@@ -163,7 +160,7 @@ private fun ProfileTopBar(
 
 @Composable
 private fun ProfileHeader(
-    name: String,
+    user: UserEntity?,
     navController: NavController,
 ) {
     Column(
@@ -248,14 +245,14 @@ private fun ProfileHeader(
             modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = name,
+                text = user?.name ?: "",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF0D131C)
             )
 
             Text(
-                text = "Digital Creator 🎨 | NYC 📍 | creating moments that matter.",
+                text = user?.bio + "| " + user?.location,
                 fontSize = 14.sp,
                 color = Color(0xFF0D131C),
                 lineHeight = 20.sp
@@ -273,7 +270,7 @@ private fun ProfileHeader(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = "d-connect.com/alex",
+                    text = user?.website ?: "No website",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF257BF4)

@@ -60,7 +60,7 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-//        startDestination = if (isAuth == null || isAuth == false) Screen.Login.route else Screen.Home.route
+//        startDestination = if (isAuth == null || isAuth == false) Screen.Login.route else Screen.Home.route,
         startDestination = Screen.Login.route
     ) {
         // Màn hình không có BottomNavigationBar
@@ -98,7 +98,7 @@ fun NavGraph(
         }
 
         composable(Screen.EditProfile.route) {
-            EditProfileScreen(viewModel = editProfileViewModel)
+            EditProfileScreen(viewModel = editProfileViewModel, navController = navController)
         }
 
         composable(Screen.Create.route) {

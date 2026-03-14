@@ -45,6 +45,7 @@ class MainActivity : ComponentActivity() {
 //            )
         )
 
+        // Khởi tạo UserPreferences và database trước khi setContent
         val userPreferences = UserPreferences(applicationContext)
         // ⭐ Get database instance and UserDao
         val database = AppDatabase.getDatabase(applicationContext)

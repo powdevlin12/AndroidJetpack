@@ -1,5 +1,7 @@
 package com.dattran.unitconverter.social.data.model
 
+import com.dattran.unitconverter.social.data.local.entity.UserEntity
+
 data class UserRegisterBody(
     val name: String,
     val email: String,
@@ -43,7 +45,8 @@ data class UserLogoutBody(
 )
 
 data class UserLogoutResponse(
-    val message: String
+    val message: String,
+    val data: UserEntity
 )
 
 data class UserInfo(
