@@ -50,6 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.dattran.unitconverter.login.LoginScreen
 import com.dattran.unitconverter.social.data.model.UserLoginBody
@@ -70,7 +71,7 @@ fun LoginScreen(
     var password by remember { mutableStateOf("!Thudat123") }
     var passwordVisible by remember { mutableStateOf(false) }
 
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     fun updateField(field: FormField, value: String) {
         when (field) {

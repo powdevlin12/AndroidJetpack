@@ -1,5 +1,6 @@
 package com.dattran.unitconverter.social.ui.screens.register
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,11 +25,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.dattran.unitconverter.social.constant.AppColor
 import com.dattran.unitconverter.social.data.model.UserRegisterBody
+import com.dattran.unitconverter.social.navigation.Screen
 import com.dattran.unitconverter.social.ui.components.AlertCustom
 import com.dattran.unitconverter.social.ui.components.ButtonCustom
+import com.dattran.unitconverter.social.ui.components.DatePickerCustom
 import com.dattran.unitconverter.social.ui.components.TextFieldCustom
+import com.dattran.unitconverter.social.utils.convertMillisToDate
 
 enum class FormField {
     NAME,
@@ -40,12 +45,15 @@ enum class FormField {
 
 @Composable
 fun Register(
-    viewModel: RegisterViewModel = RegisterViewModel(),
+    viewModel: RegisterViewModel,
+    navController: NavController
 ) {
     var name by remember { mutableStateOf("TranThuDat") }
     var email by remember { mutableStateOf("thudat@gmail.com") }
-    var password by remember { mutableStateOf("dat123") }
-    var confirmPassword by remember { mutableStateOf("dat123") }
+    var password by remember { mutableStateOf("!Thudatgm123") }
+    var confirmPassword by remember { mutableStateOf("Thudatgm123") }
+    var selectedDate by remember { mutableStateOf<Long?>(null) }
+    var showModal by remember { mutableStateOf(false) }
 
     val uiState by viewModel.uiState.collectAsState()
 
@@ -61,6 +69,17 @@ fun Register(
 
     Scaffold { padding ->
         Box(modifier = Modifier.padding(padding)) {
+            if (uiState.showPopupSuccess) {
+                AlertCustom(
+                    title = "Thông báo",
+                    message = "Đăng ký tài khoản thành công!",
+                    onlyOk = true,
+                    handleConfirm = {
+                        viewModel.handleToggleAlert();
+                        navController.navigate(Screen.Login.route)
+                    }
+                )
+            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -107,6 +126,27 @@ fun Register(
                     labelComposable = { LabelTextField("Nhập lại mật khẩu của bạn") },
                 )
                 Spacer(modifier = Modifier.height(20.dp))
+                if ((selectedDate ?: 0.0) == 0.0) {
+                    Text(
+                        "Chọn ngày sinh",
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.clickable {
+                            showModal = true
+                        })
+                } else {
+                    Text(
+                        "Ngày sinh: " + convertMillisToDate(selectedDate ?: 0),
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.clickable {
+                            showModal = true
+                        })
+                }
+                if (showModal) {
+                    DatePickerCustom(onDateSelected = { selectedDate = it }) {
+                        showModal = false
+                    }
+                }
+                Spacer(modifier = Modifier.height(20.dp))
                 ButtonCustom(
                     text = "Đăng ký",
                     onClick = {
@@ -115,7 +155,8 @@ fun Register(
                                 name = name,
                                 email = email,
                                 password = password,
-                                confirm_password = confirmPassword
+                                confirm_password = confirmPassword,
+                                date_of_birth = convertMillisToDate(selectedDate ?: 0)
                             )
                         )
                     },
@@ -158,11 +199,4 @@ fun Register(
 @Composable
 fun LabelTextField(label: String) {
     Text(label, color = AppColor.textSecondary)
-}
-
-
-@Preview
-@Composable
-fun Preview() {
-    Register()
 }

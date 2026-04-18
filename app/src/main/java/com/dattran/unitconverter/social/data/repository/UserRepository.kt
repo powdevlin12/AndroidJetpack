@@ -2,6 +2,8 @@ package com.dattran.unitconverter.social.data.repository
 
 import com.dattran.unitconverter.social.data.local.dao.UserDao
 import com.dattran.unitconverter.social.data.local.entity.UserEntity
+import com.dattran.unitconverter.social.data.model.TweetCreateBody
+import com.dattran.unitconverter.social.data.model.TweetCreateResponse
 import com.dattran.unitconverter.social.data.model.UserLogoutBody
 import com.dattran.unitconverter.social.data.model.UserLogoutResponse
 import com.dattran.unitconverter.social.data.model.UserUpdateBody
@@ -60,6 +62,21 @@ class UserRepository(
                 user = UserLogoutBody(refreshToken = refreshToken)
             )
             Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun postTweet(
+        authorization: String,
+        content: String,
+    ): Result<TweetCreateResponse> {
+        return try {
+            val result = apiService.createTweet(
+                authorization = authorization,
+                tweet = TweetCreateBody(content = content)
+            )
+            Result.success(result)
         } catch (e: Exception) {
             Result.failure(e)
         }

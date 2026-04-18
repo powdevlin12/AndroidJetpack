@@ -22,12 +22,15 @@ import com.dattran.unitconverter.social.ui.screens.login.LoginViewModel
 import com.dattran.unitconverter.social.ui.screens.profile.ProfileScreen
 import com.dattran.unitconverter.social.ui.screens.profile.ProfileViewModel
 import com.dattran.unitconverter.social.ui.screens.register.Register
+import com.dattran.unitconverter.social.ui.screens.register.RegisterViewModel
+import com.dattran.unitconverter.social.ui.screens.tweets.TweetsScreen
 import com.dattran.unitconverter.social.ui.screens.update_movie.UpdateMovieScreen
 
 sealed class Screen(val route: String) {
     object Register : Screen("register")
     object Login : Screen("login")
     object Home : Screen("home")
+    object Tweets : Screen("tweets")
     object Category : Screen("category")
     object Cart : Screen("cart")
     object Profile : Screen("profile")
@@ -51,7 +54,8 @@ fun NavGraph(
     userPreferences: UserPreferences,
     loginViewModel: LoginViewModel,
     profileViewModel: ProfileViewModel,
-    editProfileViewModel: EditProfileViewModel
+    editProfileViewModel: EditProfileViewModel,
+    registerViewModel: RegisterViewModel
 ) {
     // ⭐ Get current route để biết có hiển thị BottomNavigationBar không
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
@@ -60,8 +64,8 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-//        startDestination = if (isAuth == null || isAuth == false) Screen.Login.route else Screen.Home.route,
-        startDestination = Screen.Login.route
+        startDestination = if (isAuth == null || isAuth == false) Screen.Login.route else Screen.Home.route,
+//        startDestination = Screen.Login.route
     ) {
         // Màn hình không có BottomNavigationBar
         composable(Screen.Login.route) {
@@ -69,13 +73,19 @@ fun NavGraph(
         }
 
         composable(Screen.Register.route) {
-            Register()
+            Register(viewModel = registerViewModel, navController = navController)
         }
 
         // ⭐ Các màn hình có BottomNavigationBar
         composable(Screen.Home.route) {
             MainScreen(navController, currentRoute) {
-                HomeQTV(navController)
+                TweetsScreen()
+            }
+        }
+
+        composable(Screen.Tweets.route) {
+            MainScreen(navController, currentRoute) {
+                TweetsScreen()
             }
         }
 

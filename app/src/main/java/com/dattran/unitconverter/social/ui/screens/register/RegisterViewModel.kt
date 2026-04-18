@@ -9,10 +9,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+
 
 data class RegisterState(
     val isLoading: Boolean = false,
     val errorMsg: String = "",
+    val showPopupSuccess: Boolean = false
 )
 
 class RegisterViewModel : ViewModel() {
@@ -29,6 +32,12 @@ class RegisterViewModel : ViewModel() {
     fun handleSetErrorMsg(msg: String) {
         _uiState.value = _uiState.value.copy(
             errorMsg = msg
+        )
+    }
+
+    fun handleToggleAlert() {
+        _uiState.value = _uiState.value.copy(
+            showPopupSuccess = !_uiState.value.showPopupSuccess
         )
     }
 
@@ -65,7 +74,8 @@ class RegisterViewModel : ViewModel() {
                 onSuccess = { repository ->
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        errorMsg = ""
+                        errorMsg = "",
+                        showPopupSuccess = true
                     )
                 },
                 onFailure = { error ->

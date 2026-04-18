@@ -1,5 +1,7 @@
 package com.dattran.unitconverter.social.data.service
 
+import com.dattran.unitconverter.social.data.model.TweetCreateBody
+import com.dattran.unitconverter.social.data.model.TweetCreateResponse
 import com.dattran.unitconverter.social.data.model.UserLogoutBody
 import com.dattran.unitconverter.social.data.model.UserLogoutResponse
 import com.dattran.unitconverter.social.data.model.UserUpdateBody
@@ -27,6 +29,13 @@ interface AuthApiService {
         @Path("user_id") userId: String,
         @Body user: UserUpdateBody,
     ): UserLogoutResponse
+
+    //    Post tweet
+    @POST("tweets/")
+    suspend fun createTweet(
+        @Header("Authorization") authorization: String,
+        @Body tweet: TweetCreateBody,
+    ): TweetCreateResponse
 
     companion object {
         private const val BASE_URL = "http://10.0.2.2:1236/"

@@ -17,12 +17,16 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
+import com.dattran.unitconverter.navigation.Navigation
 import com.dattran.unitconverter.social.data.local.AppDatabase
 import com.dattran.unitconverter.social.data.local.UserPreferences
+import com.dattran.unitconverter.social.data.repository.UserRepository
+import com.dattran.unitconverter.social.data.service.AuthApiService
 import com.dattran.unitconverter.social.navigation.NavGraph
 import com.dattran.unitconverter.social.ui.screens.edit_profile.EditProfileViewModel
 import com.dattran.unitconverter.social.ui.screens.login.LoginViewModel
 import com.dattran.unitconverter.social.ui.screens.profile.ProfileViewModel
+import com.dattran.unitconverter.social.ui.screens.register.RegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -50,10 +54,14 @@ class MainActivity : ComponentActivity() {
         // ⭐ Get database instance and UserDao
         val database = AppDatabase.getDatabase(applicationContext)
         val userDao = database.userDao()
+        val userInfoRepository = UserRepository(userDao = userDao, AuthApiService.create())
 
-        val loginViewModel = LoginViewModel(userPreferences, userDao)
+
+        val loginViewModel =
+            LoginViewModel(userPreferences, userInfoRepository = userInfoRepository)
         val profileViewModel = ProfileViewModel(userDao = userDao)
         val editProfileViewModel = EditProfileViewModel(userDao = userDao)
+        val registerViewModel = RegisterViewModel();
         // ⭐ BƯỚC 3: Sau khi load xong, ẩn splash
         keepSplashScreen = false
 
@@ -77,7 +85,8 @@ class MainActivity : ComponentActivity() {
                         userPreferences = userPreferences,
                         loginViewModel = loginViewModel,
                         profileViewModel = profileViewModel,
-                        editProfileViewModel = editProfileViewModel
+                        editProfileViewModel = editProfileViewModel,
+                        registerViewModel = registerViewModel
                     )
                 }
             }

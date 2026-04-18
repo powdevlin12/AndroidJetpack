@@ -86,4 +86,6 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
     // Accompanist Permissions (cho runtime permission)
     implementation("com.google.accompanist:accompanist-permissions:0.32.0")
+    // Coil - Image loading
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }

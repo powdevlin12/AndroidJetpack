@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+
 
 data class LoginState(
     val isLoading: Boolean = false,
@@ -24,12 +26,11 @@ data class LoginState(
 
 class LoginViewModel(
     val userPreferences: UserPreferences,
-    private val userDao: UserDao
+    private val userInfoRepository: UserRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(LoginState())
     val uiState: StateFlow<LoginState> = _uiState.asStateFlow()
     private val repository = MovieRepository(MovieApiService.create())
-    private val userInfoRepository = UserRepository(userDao = userDao, AuthApiService.create())
 
     fun onChangeStateLoading(loading: Boolean) {
         _uiState.value = _uiState.value.copy(
