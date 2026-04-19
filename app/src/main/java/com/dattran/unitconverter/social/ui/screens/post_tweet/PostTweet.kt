@@ -1,6 +1,10 @@
 package com.dattran.unitconverter.social.ui.screens.post_tweet
 
+import android.annotation.SuppressLint
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -14,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -40,19 +45,40 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.dattran.unitconverter.R
 
 private val BgLight = Color(0xFFF5F7F8)
 private val PrimaryBlue = Color(0xFF257BF4)
 
+data class FeatureNewPostItem(
+    val img: Int,
+    val name: String,
+    val onPress: () -> Unit?
+)
+
+private val featureNewPost: List<FeatureNewPostItem> = listOf(
+    FeatureNewPostItem(R.drawable.tag, name = "Tag people", onPress = {}),
+    FeatureNewPostItem(R.drawable.location, name = "Add Location", onPress = {}),
+    FeatureNewPostItem(R.drawable.reply, name = "Who can reply?", onPress = {})
+)
+
 @Composable
 fun PostTweetScreen(
-    viewModel: PostTweetViewModel = PostTweetViewModel()
+    viewModel: PostTweetViewModel,
+    navController: NavController
 ) {
     var post by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
-            PostTweetsTopBar()
+            PostTweetsTopBar(onPressCancel = {
+                Log.d("DatTest", "Go Back")
+                navController.popBackStack()
+            })
         },
         containerColor = BgLight
     ) { innerPadding ->
@@ -75,8 +101,10 @@ fun PostTweetScreen(
                             tint = Color(0xFF94A3B8)
                         )
                     },
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-                    shape = RoundedCornerShape(50),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    shape = RoundedCornerShape(size = 24.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
                         unfocusedContainerColor = Color.White,
@@ -86,6 +114,19 @@ fun PostTweetScreen(
                     ),
                     singleLine = false
                 )
+                Spacer(modifier = Modifier.height(16.dp))
+                Box(modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth().height(1.dp).background(Color(0xFFE2E8F0)))
+            }
+            items(featureNewPost, key = { it.name }) { feature ->
+                Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(feature.img),
+                        contentDescription = feature.name,
+                        modifier = Modifier.size(40.dp)
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(feature.name, style = TextStyle(fontSize = 14.sp, color = Color(0xFF0F172A)))
+                }
             }
         }
     }
@@ -93,7 +134,9 @@ fun PostTweetScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PostTweetsTopBar() {
+private fun PostTweetsTopBar(
+    onPressCancel: () -> Unit
+) {
     Surface(
         color = Color.White.copy(alpha = 0.95f),
         shadowElevation = 2.dp
@@ -112,11 +155,14 @@ private fun PostTweetsTopBar() {
                     "Cancel",
                     color = Color(0xFF475569),
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.W500
+                    fontWeight = FontWeight.W500,
+                    modifier = Modifier.clickable {
+                        onPressCancel()
+                    }
                 )
             }
             Text(
-                text = "Post",
+                text = "New Post",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF0D131C)
@@ -131,7 +177,7 @@ private fun PostTweetsTopBar() {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.Send,
                         contentDescription = "Messages",
-                        tint = Color(0xFF0D131C),
+                        tint = Color(0xFF257BF4),
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -140,8 +186,12 @@ private fun PostTweetsTopBar() {
     }
 }
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Preview
 @Composable
-fun PostTweetScreenPreview() {
-    PostTweetScreen()
+fun Preview() {
+    PostTweetScreen(
+        viewModel = PostTweetViewModel(),
+        navController = rememberNavController()
+    )
 }

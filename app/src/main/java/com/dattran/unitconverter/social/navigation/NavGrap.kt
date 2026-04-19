@@ -19,6 +19,8 @@ import com.dattran.unitconverter.social.ui.screens.edit_profile.EditProfileViewM
 import com.dattran.unitconverter.social.ui.screens.home_qtv.HomeQTV
 import com.dattran.unitconverter.social.ui.screens.login.LoginScreen
 import com.dattran.unitconverter.social.ui.screens.login.LoginViewModel
+import com.dattran.unitconverter.social.ui.screens.post_tweet.PostTweetScreen
+import com.dattran.unitconverter.social.ui.screens.post_tweet.PostTweetViewModel
 import com.dattran.unitconverter.social.ui.screens.profile.ProfileScreen
 import com.dattran.unitconverter.social.ui.screens.profile.ProfileViewModel
 import com.dattran.unitconverter.social.ui.screens.register.Register
@@ -34,6 +36,7 @@ sealed class Screen(val route: String) {
     object Category : Screen("category")
     object Cart : Screen("cart")
     object Profile : Screen("profile")
+    object PostTweet : Screen("post-tweet")
     object EditProfile : Screen("edit-profile")
     object Detail : Screen("detail/{movieId}") {
         fun createRoute(movieId: Int) = "detail/$movieId"
@@ -55,7 +58,8 @@ fun NavGraph(
     loginViewModel: LoginViewModel,
     profileViewModel: ProfileViewModel,
     editProfileViewModel: EditProfileViewModel,
-    registerViewModel: RegisterViewModel
+    registerViewModel: RegisterViewModel,
+    postTweetViewModel: PostTweetViewModel
 ) {
     // ⭐ Get current route để biết có hiển thị BottomNavigationBar không
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
@@ -64,7 +68,7 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = if (isAuth == null || isAuth == false) Screen.Login.route else Screen.Home.route,
+        startDestination = if (isAuth == null || isAuth == false) Screen.Login.route else Screen.PostTweet.route,
 //        startDestination = Screen.Login.route
     ) {
         // Màn hình không có BottomNavigationBar
@@ -104,6 +108,12 @@ fun NavGraph(
         composable(Screen.Profile.route) {
             MainScreen(navController, currentRoute) {
                 ProfileScreen(navController, viewModel = profileViewModel)
+            }
+        }
+
+        composable(Screen.PostTweet.route) {
+            MainScreen(navController, currentRoute) {
+                PostTweetScreen(navController = navController, viewModel = postTweetViewModel)
             }
         }
 

@@ -25,6 +25,7 @@ import com.dattran.unitconverter.social.data.service.AuthApiService
 import com.dattran.unitconverter.social.navigation.NavGraph
 import com.dattran.unitconverter.social.ui.screens.edit_profile.EditProfileViewModel
 import com.dattran.unitconverter.social.ui.screens.login.LoginViewModel
+import com.dattran.unitconverter.social.ui.screens.post_tweet.PostTweetViewModel
 import com.dattran.unitconverter.social.ui.screens.profile.ProfileViewModel
 import com.dattran.unitconverter.social.ui.screens.register.RegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,35 +63,36 @@ class MainActivity : ComponentActivity() {
         val profileViewModel = ProfileViewModel(userDao = userDao)
         val editProfileViewModel = EditProfileViewModel(userDao = userDao)
         val registerViewModel = RegisterViewModel();
+        val postTweetViewModel = PostTweetViewModel();
+
         // ⭐ BƯỚC 3: Sau khi load xong, ẩn splash
         keepSplashScreen = false
 
         setContent {
             setStatusBarColor(color = Color(0xFFFFFFFF))
-            Scaffold { paddingValues ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                ) {
-                    val navController = rememberNavController()
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                val navController = rememberNavController()
 
-                    // ⭐ XỬ LÝ DEEPLINK
-                    LaunchedEffect(intent) {
-                        handleDeepLink(intent, navController)
-                    }
-
-                    NavGraph(
-                        navController = navController,
-                        userPreferences = userPreferences,
-                        loginViewModel = loginViewModel,
-                        profileViewModel = profileViewModel,
-                        editProfileViewModel = editProfileViewModel,
-                        registerViewModel = registerViewModel
-                    )
+                // ⭐ XỬ LÝ DEEPLINK
+                LaunchedEffect(intent) {
+                    handleDeepLink(intent, navController)
                 }
+
+                NavGraph(
+                    navController = navController,
+                    userPreferences = userPreferences,
+                    loginViewModel = loginViewModel,
+                    profileViewModel = profileViewModel,
+                    editProfileViewModel = editProfileViewModel,
+                    registerViewModel = registerViewModel,
+                    postTweetViewModel = postTweetViewModel
+                )
             }
         }
+
     }
 
     // ⭐ Xử lý khi có intent mới (khi app đang chạy)
