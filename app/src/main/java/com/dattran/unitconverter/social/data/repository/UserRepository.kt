@@ -66,19 +66,4 @@ class UserRepository(
             Result.failure(e)
         }
     }
-
-    suspend fun postTweet(
-        authorization: String,
-        content: String,
-    ): Result<TweetCreateResponse> {
-        return try {
-            val result = apiService.createTweet(
-                authorization = authorization,
-                tweet = TweetCreateBody(content = content)
-            )
-            Result.success(result)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
 }

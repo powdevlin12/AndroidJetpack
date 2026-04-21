@@ -18,6 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.dattran.unitconverter.social.navigation.Screen
 import com.dattran.unitconverter.social.ui.screens.tweets.components.StoriesRail
 import com.dattran.unitconverter.social.ui.screens.tweets.components.TweetCard
 
@@ -26,6 +28,7 @@ private val BgLight = Color(0xFFF5F7F8)
 
 @Composable
 fun TweetsScreen(
+    navigateController: NavController,
     viewModel: TweetsViewModel = viewModel()
 ) {
     val stories by viewModel.stories.collectAsState()
@@ -33,7 +36,9 @@ fun TweetsScreen(
 
     Scaffold(
         topBar = {
-            TweetsTopBar()
+            TweetsTopBar() {
+                navigateController.navigate(Screen.PostTweet.route)
+            }
         },
         containerColor = BgLight
     ) { innerPadding ->
@@ -77,7 +82,9 @@ fun TweetsScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TweetsTopBar() {
+private fun TweetsTopBar(
+    onClickIcon: () -> Unit
+) {
     Surface(
         color = Color.White.copy(alpha = 0.95f),
         shadowElevation = 2.dp
@@ -101,7 +108,9 @@ private fun TweetsTopBar() {
             // DM / Send button with notification dot
             Box {
                 IconButton(
-                    onClick = { },
+                    onClick = {
+                        onClickIcon()
+                    },
                     modifier = Modifier.size(40.dp)
                 ) {
                     Icon(
@@ -126,10 +135,10 @@ private fun TweetsTopBar() {
         }
     }
 }
-
-@Preview(showBackground = true, widthDp = 460)
-@Composable
-fun PreviewTweetsScreen() {
-    TweetsScreen()
-}
-
+//
+//@Preview(showBackground = true, widthDp = 460)
+//@Composable
+//fun PreviewTweetsScreen() {
+//    TweetsScreen()
+//}
+//

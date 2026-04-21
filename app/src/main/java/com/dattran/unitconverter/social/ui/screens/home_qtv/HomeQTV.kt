@@ -1,6 +1,7 @@
 package com.dattran.unitconverter.social.ui.screens.home_qtv
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.dattran.unitconverter.social.navigation.Screen
 import com.dattran.unitconverter.social.ui.screens.home_qtv.components.BarcodeCard
 import com.dattran.unitconverter.social.ui.screens.home_qtv.components.FeatureList
 import com.dattran.unitconverter.social.ui.screens.home_qtv.components.PointAndGift
@@ -63,6 +65,9 @@ fun HomeQTV(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 16.dp)
+                .clickable{
+                    navController.navigate(Screen.PostTweet.route)
+                }
         )
 
         // Barcode Card

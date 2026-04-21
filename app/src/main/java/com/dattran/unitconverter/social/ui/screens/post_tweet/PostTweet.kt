@@ -78,7 +78,10 @@ fun PostTweetScreen(
             PostTweetsTopBar(onPressCancel = {
                 Log.d("DatTest", "Go Back")
                 navController.popBackStack()
-            })
+            }) {
+                Log.d("DatTest", "on Post")
+                viewModel.handleAddTweet(post);
+            }
         },
         containerColor = BgLight
     ) { innerPadding ->
@@ -115,17 +118,29 @@ fun PostTweetScreen(
                     singleLine = false
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Box(modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth().height(1.dp).background(Color(0xFFE2E8F0)))
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(Color(0xFFE2E8F0))
+                )
             }
             items(featureNewPost, key = { it.name }) { feature ->
-                Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Image(
                         painter = painterResource(feature.img),
                         contentDescription = feature.name,
                         modifier = Modifier.size(40.dp)
                     )
                     Spacer(modifier = Modifier.width(12.dp))
-                    Text(feature.name, style = TextStyle(fontSize = 14.sp, color = Color(0xFF0F172A)))
+                    Text(
+                        feature.name,
+                        style = TextStyle(fontSize = 14.sp, color = Color(0xFF0F172A))
+                    )
                 }
             }
         }
@@ -135,7 +150,8 @@ fun PostTweetScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PostTweetsTopBar(
-    onPressCancel: () -> Unit
+    onPressCancel: () -> Unit,
+    onPost: () -> Unit
 ) {
     Surface(
         color = Color.White.copy(alpha = 0.95f),
@@ -171,7 +187,9 @@ private fun PostTweetsTopBar(
             // DM / Send button with notification dot
             Box {
                 IconButton(
-                    onClick = { },
+                    onClick = {
+                        onPost()
+                    },
                     modifier = Modifier.size(40.dp)
                 ) {
                     Icon(
@@ -185,13 +203,13 @@ private fun PostTweetsTopBar(
         }
     }
 }
-
-@SuppressLint("ViewModelConstructorInComposable")
-@Preview
-@Composable
-fun Preview() {
-    PostTweetScreen(
-        viewModel = PostTweetViewModel(),
-        navController = rememberNavController()
-    )
-}
+//
+//@SuppressLint("ViewModelConstructorInComposable")
+//@Preview
+//@Composable
+//fun Preview() {
+//    PostTweetScreen(
+//        viewModel = PostTweetViewModel(),
+//        navController = rememberNavController()
+//    )
+//}

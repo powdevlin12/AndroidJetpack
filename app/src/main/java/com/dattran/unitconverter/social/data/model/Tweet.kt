@@ -50,7 +50,7 @@ data class TweetCreateBody(
     val type: Short = 0,  // "text", "image", "video"
     val audience: Short = 0,
     val parentId: String? = null,
-    val hashTag: List<String>? = emptyList<String>(),
+    val hashTags: List<String>? = emptyList<String>(),
     val mentions: List<String>? = emptyList<String>()
 )
 

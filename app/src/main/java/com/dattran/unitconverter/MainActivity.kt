@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.dattran.unitconverter.navigation.Navigation
 import com.dattran.unitconverter.social.data.local.AppDatabase
 import com.dattran.unitconverter.social.data.local.UserPreferences
+import com.dattran.unitconverter.social.data.repository.TweetRepository
 import com.dattran.unitconverter.social.data.repository.UserRepository
 import com.dattran.unitconverter.social.data.service.AuthApiService
 import com.dattran.unitconverter.social.navigation.NavGraph
@@ -55,15 +56,16 @@ class MainActivity : ComponentActivity() {
         // ⭐ Get database instance and UserDao
         val database = AppDatabase.getDatabase(applicationContext)
         val userDao = database.userDao()
-        val userInfoRepository = UserRepository(userDao = userDao, AuthApiService.create())
-
+        val apiService = AuthApiService.create()
+        val userInfoRepository = UserRepository(userDao = userDao, apiService)
+        val tweetRepository = TweetRepository(apiService = apiService, userDao = userDao)
 
         val loginViewModel =
             LoginViewModel(userPreferences, userInfoRepository = userInfoRepository)
         val profileViewModel = ProfileViewModel(userDao = userDao)
         val editProfileViewModel = EditProfileViewModel(userDao = userDao)
         val registerViewModel = RegisterViewModel();
-        val postTweetViewModel = PostTweetViewModel();
+        val postTweetViewModel = PostTweetViewModel(repository = tweetRepository);
 
         // ⭐ BƯỚC 3: Sau khi load xong, ẩn splash
         keepSplashScreen = false

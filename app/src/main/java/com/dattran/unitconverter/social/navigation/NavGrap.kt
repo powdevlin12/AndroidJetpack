@@ -68,7 +68,7 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = if (isAuth == null || isAuth == false) Screen.Login.route else Screen.PostTweet.route,
+        startDestination = if (isAuth == null || isAuth == false) Screen.Login.route else Screen.Login.route,
 //        startDestination = Screen.Login.route
     ) {
         // Màn hình không có BottomNavigationBar
@@ -83,13 +83,13 @@ fun NavGraph(
         // ⭐ Các màn hình có BottomNavigationBar
         composable(Screen.Home.route) {
             MainScreen(navController, currentRoute) {
-                TweetsScreen()
+                TweetsScreen(navigateController = navController)
             }
         }
 
         composable(Screen.Tweets.route) {
             MainScreen(navController, currentRoute) {
-                TweetsScreen()
+                TweetsScreen(navigateController = navController)
             }
         }
 
