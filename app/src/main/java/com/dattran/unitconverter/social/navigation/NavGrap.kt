@@ -17,6 +17,7 @@ import com.dattran.unitconverter.social.ui.screens.create_movie.CreateMovieScree
 import com.dattran.unitconverter.social.ui.screens.edit_profile.EditProfileScreen
 import com.dattran.unitconverter.social.ui.screens.edit_profile.EditProfileViewModel
 import com.dattran.unitconverter.social.ui.screens.home_qtv.HomeQTV
+import com.dattran.unitconverter.social.ui.screens.loading_app.LoadingApp
 import com.dattran.unitconverter.social.ui.screens.login.LoginScreen
 import com.dattran.unitconverter.social.ui.screens.login.LoginViewModel
 import com.dattran.unitconverter.social.ui.screens.post_tweet.PostTweetScreen
@@ -29,6 +30,7 @@ import com.dattran.unitconverter.social.ui.screens.tweets.TweetsScreen
 import com.dattran.unitconverter.social.ui.screens.update_movie.UpdateMovieScreen
 
 sealed class Screen(val route: String) {
+    object LoadingApp : Screen("loading-app")
     object Register : Screen("register")
     object Login : Screen("login")
     object Home : Screen("home")
@@ -64,13 +66,15 @@ fun NavGraph(
     // ⭐ Get current route để biết có hiển thị BottomNavigationBar không
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry.value?.destination?.route
-    val isAuth by userPreferences.isAuth.collectAsStateWithLifecycle(initialValue = false)
 
     NavHost(
         navController = navController,
-        startDestination = if (isAuth == null || isAuth == false) Screen.Login.route else Screen.Login.route,
-//        startDestination = Screen.Login.route
+        startDestination = Screen.LoadingApp.route
     ) {
+        composable(Screen.LoadingApp.route) {
+            LoadingApp(userPreferences = userPreferences, navController = navController)
+        }
+
         // Màn hình không có BottomNavigationBar
         composable(Screen.Login.route) {
             LoginScreen(navController, viewModel = loginViewModel)
