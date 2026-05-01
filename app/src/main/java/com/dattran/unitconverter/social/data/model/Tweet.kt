@@ -57,3 +57,63 @@ data class TweetCreateBody(
 data class TweetCreateResponse(
     val tweet: TweetReal
 )
+
+enum class PostType(val value: Int) {
+    Tweet(0),
+    ReTweet(1),
+    Comment(2)
+}
+
+enum class PostAudience(val value: Int) {
+    None(-1),
+    Everyone(0),
+    TwitterCircle(1)
+}
+
+data class PostUser(
+    val _id: String,
+    val name: String,
+    val email: String,
+    val avatar: String,
+)
+
+data class PostHashTags(
+    val _id: String,
+    val name: String,
+    val created_at: String
+)
+
+data class Post(
+    val id: String,
+    val user: PostUser,
+    val type: PostType,
+    val audience: PostAudience? = PostAudience.None,
+    val content: String,
+    val parent: PostUser?,
+    val hashTags: List<PostHashTags>?,
+    val mentions: List<PostUser>?,
+    val guestViews: Int,
+    val userViews: Int,
+    val createdAt: String,
+    val updatedAt: String
+)
+
+data class PostResponse(
+    val _id: String,
+    val user: PostUser,
+    val type: PostType,
+    val audience: PostAudience? = PostAudience.None,
+    val content: String,
+    val parent: PostUser?,
+    val hashTags: List<PostHashTags>?,
+    val mentions: List<PostUser>?,
+    val guest_views: Int,
+    val user_views: Int,
+    val created_at: String,
+    val updated_at: String
+)
+
+data class GetPostResponse(
+    val message: String,
+    val data: List<PostResponse>
+)

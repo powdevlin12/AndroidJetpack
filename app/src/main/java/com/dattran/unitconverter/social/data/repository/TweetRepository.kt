@@ -1,6 +1,7 @@
 package com.dattran.unitconverter.social.data.repository
 
 import com.dattran.unitconverter.social.data.local.dao.UserDao
+import com.dattran.unitconverter.social.data.model.GetPostResponse
 import com.dattran.unitconverter.social.data.model.TweetCreateBody
 import com.dattran.unitconverter.social.data.model.TweetCreateResponse
 import com.dattran.unitconverter.social.data.service.AuthApiService
@@ -19,6 +20,19 @@ class TweetRepository(
             val response = apiService.createTweet(
                 authorization = "Bearer " + (user?.accessToken ?: ""),
                 tweet = newTweet
+            )
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getTweets(): Result<GetPostResponse> {
+        return try {
+            val user = userDao.getUserLocal().first()
+
+            val response = apiService.getTweets(
+                authorization = "Bearer " + (user?.accessToken ?: ""),
             )
             Result.success(response)
         } catch (e: Exception) {

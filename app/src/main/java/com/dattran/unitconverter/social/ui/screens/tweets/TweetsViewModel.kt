@@ -1,14 +1,30 @@
 package com.dattran.unitconverter.social.ui.screens.tweets
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dattran.unitconverter.social.data.model.Post
+import com.dattran.unitconverter.social.data.model.PostAudience
+import com.dattran.unitconverter.social.data.model.PostType
 import com.dattran.unitconverter.social.data.model.StoryItem
 import com.dattran.unitconverter.social.data.model.Tweet
 import com.dattran.unitconverter.social.data.model.TweetUser
+import com.dattran.unitconverter.social.data.repository.TweetRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class TweetsViewModel : ViewModel() {
+data class TweetsViewData(
+    val posts: List<Post>?,
+    val loading: Boolean
+)
+
+class TweetsViewModel(
+    private val repository: TweetRepository
+) : ViewModel() {
 
     private val _stories = MutableStateFlow(
         listOf(
@@ -148,6 +164,40 @@ class TweetsViewModel : ViewModel() {
         _tweets.value = _tweets.value.map { tweet ->
             if (tweet.id == tweetId) tweet.copy(isBookmarked = !tweet.isBookmarked)
             else tweet
+        }
+    }
+
+    val _post = MutableStateFlow(TweetsViewData(posts = null, loading = false))
+    val post: StateFlow<TweetsViewData> = _post.asStateFlow()
+
+    fun handleGetPosts() {
+        viewModelScope.launch {
+            repository.getTweets().fold(
+                onSuccess = { response ->
+                    val listPosts = response.data.map { post ->
+                        Post(
+                            id = post._id ?: "",
+                            content = post.content ?: "",
+                            type = post.type ?: PostType.Tweet,
+                            userViews = post.user_views ?: 0,
+                            guestViews = post.guest_views ?: 0,
+                            user = post.user,
+                            parent = post.parent,
+                            audience = post.audience ?: PostAudience.None,
+                            hashTags = post.hashTags ?: emptyList(),
+                            mentions = post.mentions ?: emptyList(),
+                            createdAt = post.created_at ?: "",
+                            updatedAt = post.updated_at ?: "",
+                        )
+                    }
+
+                    _post.update { it.copy(loading = false, posts = listPosts) }
+                },
+                onFailure = { error ->
+                    Log.e("DatTest", "That Bai: ${error.message}")
+                    _post.update { it.copy(loading = false) }
+                }
+            )
         }
     }
 }

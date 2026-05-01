@@ -29,6 +29,7 @@ import com.dattran.unitconverter.social.ui.screens.login.LoginViewModel
 import com.dattran.unitconverter.social.ui.screens.post_tweet.PostTweetViewModel
 import com.dattran.unitconverter.social.ui.screens.profile.ProfileViewModel
 import com.dattran.unitconverter.social.ui.screens.register.RegisterViewModel
+import com.dattran.unitconverter.social.ui.screens.tweets.TweetsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -66,6 +67,8 @@ class MainActivity : ComponentActivity() {
         val editProfileViewModel = EditProfileViewModel(userDao = userDao)
         val registerViewModel = RegisterViewModel();
         val postTweetViewModel = PostTweetViewModel(repository = tweetRepository);
+        val tweetsViewModel = TweetsViewModel(repository = tweetRepository)
+
 
         // ⭐ BƯỚC 3: Sau khi load xong, ẩn splash
         keepSplashScreen = false
@@ -90,7 +93,8 @@ class MainActivity : ComponentActivity() {
                     profileViewModel = profileViewModel,
                     editProfileViewModel = editProfileViewModel,
                     registerViewModel = registerViewModel,
-                    postTweetViewModel = postTweetViewModel
+                    postTweetViewModel = postTweetViewModel,
+                    tweetsViewModel = tweetsViewModel
                 )
             }
         }

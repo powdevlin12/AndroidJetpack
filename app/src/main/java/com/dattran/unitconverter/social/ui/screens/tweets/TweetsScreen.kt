@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -29,10 +30,15 @@ private val BgLight = Color(0xFFF5F7F8)
 @Composable
 fun TweetsScreen(
     navigateController: NavController,
-    viewModel: TweetsViewModel = viewModel()
+    viewModel: TweetsViewModel
 ) {
     val stories by viewModel.stories.collectAsState()
     val tweets by viewModel.tweets.collectAsState()
+    val post by viewModel.post.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.handleGetPosts()
+    }
 
     Scaffold(
         topBar = {

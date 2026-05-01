@@ -27,6 +27,7 @@ import com.dattran.unitconverter.social.ui.screens.profile.ProfileViewModel
 import com.dattran.unitconverter.social.ui.screens.register.Register
 import com.dattran.unitconverter.social.ui.screens.register.RegisterViewModel
 import com.dattran.unitconverter.social.ui.screens.tweets.TweetsScreen
+import com.dattran.unitconverter.social.ui.screens.tweets.TweetsViewModel
 import com.dattran.unitconverter.social.ui.screens.update_movie.UpdateMovieScreen
 
 sealed class Screen(val route: String) {
@@ -61,7 +62,8 @@ fun NavGraph(
     profileViewModel: ProfileViewModel,
     editProfileViewModel: EditProfileViewModel,
     registerViewModel: RegisterViewModel,
-    postTweetViewModel: PostTweetViewModel
+    postTweetViewModel: PostTweetViewModel,
+    tweetsViewModel: TweetsViewModel
 ) {
     // ⭐ Get current route để biết có hiển thị BottomNavigationBar không
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
@@ -87,13 +89,13 @@ fun NavGraph(
         // ⭐ Các màn hình có BottomNavigationBar
         composable(Screen.Home.route) {
             MainScreen(navController, currentRoute) {
-                TweetsScreen(navigateController = navController)
+                TweetsScreen(navigateController = navController, viewModel = tweetsViewModel)
             }
         }
 
         composable(Screen.Tweets.route) {
             MainScreen(navController, currentRoute) {
-                TweetsScreen(navigateController = navController)
+                TweetsScreen(navigateController = navController, viewModel = tweetsViewModel)
             }
         }
 
