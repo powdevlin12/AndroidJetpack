@@ -35,10 +35,10 @@ fun LoadingApp(userPreferences: UserPreferences, navController: NavController) {
                 popUpTo(0) { inclusive = true }
             }
 
-            null -> Unit // đang loading, chưa làm gì
+            null -> Unit
         }
     }
-    
+
     Scaffold() {
         Column(
             modifier = Modifier

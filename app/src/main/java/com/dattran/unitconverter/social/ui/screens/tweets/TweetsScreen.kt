@@ -7,10 +7,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.*
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,17 +28,22 @@ import androidx.navigation.NavController
 import com.dattran.unitconverter.social.navigation.Screen
 import com.dattran.unitconverter.social.ui.screens.tweets.components.StoriesRail
 import com.dattran.unitconverter.social.ui.screens.tweets.components.TweetCard
+import kotlinx.coroutines.launch
 
 private val PrimaryBlue = Color(0xFF257BF4)
 private val BgLight = Color(0xFFF5F7F8)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TweetsScreen(
     navigateController: NavController,
     viewModel: TweetsViewModel
 ) {
+    // handle pull refresh
+    var isRefreshing by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+
     val stories by viewModel.stories.collectAsState()
-    val tweets by viewModel.tweets.collectAsState()
     val postData by viewModel.postData.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -48,44 +58,56 @@ fun TweetsScreen(
         },
         containerColor = BgLight
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = innerPadding.calculateTopPadding()),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            // ── Stories Rail ─────────────────────────────────
-            item(key = "stories") {
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = Color.White,
-                    shadowElevation = 1.dp
-                ) {
-                    Column(
-                        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
-                    ) {
-                        StoriesRail(stories = stories)
-                    }
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+            onRefresh = {
+                scope.launch {
+                    isRefreshing = true
+                    viewModel.handleGetPosts()
+                    isRefreshing = false
                 }
             }
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // ── Stories Rail ─────────────────────────────────
+                item(key = "stories") {
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Color.White,
+                        shadowElevation = 1.dp
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+                        ) {
+                            StoriesRail(stories = stories)
+                        }
+                    }
+                }
 
-            // ── Tweet Cards ───────────────────────────────────
-            items(postData.posts.orEmpty(), key = { it.id }) { post ->
-                TweetCard(
-                    post = post,
-                    onLikeClick = { viewModel.toggleLike(post.id) },
-                    onCommentClick = { },
-                    onRetweetClick = { },
-                    onShareClick = { }
-                )
-            }
+                // ── Tweet Cards ───────────────────────────────────
+                items(postData.posts.orEmpty(), key = { it.id }) { post ->
+                    TweetCard(
+                        post = post,
+                        onLikeClick = { },
+                        onCommentClick = { },
+                        onRetweetClick = { },
+                        onShareClick = { }
+                    )
+                }
 
-            // ── Footer spacer ─────────────────────────────────
-            item(key = "spacer") {
-                Spacer(modifier = Modifier.height(24.dp))
+                // ── Footer spacer ─────────────────────────────────
+                item(key = "spacer") {
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
             }
         }
     }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
