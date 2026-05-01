@@ -23,7 +23,8 @@ class PostTweetViewModel(
     val postTweetUi: StateFlow<PostTweetData> = _postTweetUi.asStateFlow()
 
     fun handleAddTweet(
-        content: String
+        content: String,
+        onHandleSuccess: () -> Boolean?
     ) {
         viewModelScope.launch {
             repository.addTweet(
@@ -31,6 +32,7 @@ class PostTweetViewModel(
             ).fold(
                 onSuccess = { response ->
                     Log.d("DatTest", "Thanh Cong")
+                    onHandleSuccess()
                 },
                 onFailure = { error ->
                     Log.d("DatTest", "That Bai")

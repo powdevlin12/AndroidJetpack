@@ -80,7 +80,9 @@ fun PostTweetScreen(
                 navController.popBackStack()
             }) {
                 Log.d("DatTest", "on Post")
-                viewModel.handleAddTweet(post);
+                viewModel.handleAddTweet(post) {
+                    navController.popBackStack()
+                };
             }
         },
         containerColor = BgLight
