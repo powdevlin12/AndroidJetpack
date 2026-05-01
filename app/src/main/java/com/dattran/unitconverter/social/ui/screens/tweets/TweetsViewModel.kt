@@ -167,8 +167,8 @@ class TweetsViewModel(
         }
     }
 
-    val _post = MutableStateFlow(TweetsViewData(posts = null, loading = false))
-    val post: StateFlow<TweetsViewData> = _post.asStateFlow()
+    val _postData = MutableStateFlow(TweetsViewData(posts = null, loading = false))
+    val postData: StateFlow<TweetsViewData> = _postData.asStateFlow()
 
     fun handleGetPosts() {
         viewModelScope.launch {
@@ -191,11 +191,11 @@ class TweetsViewModel(
                         )
                     }
 
-                    _post.update { it.copy(loading = false, posts = listPosts) }
+                    _postData.update { it.copy(loading = false, posts = listPosts) }
                 },
                 onFailure = { error ->
                     Log.e("DatTest", "That Bai: ${error.message}")
-                    _post.update { it.copy(loading = false) }
+                    _postData.update { it.copy(loading = false) }
                 }
             )
         }

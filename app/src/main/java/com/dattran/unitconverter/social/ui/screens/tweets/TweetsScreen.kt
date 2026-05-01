@@ -34,7 +34,7 @@ fun TweetsScreen(
 ) {
     val stories by viewModel.stories.collectAsState()
     val tweets by viewModel.tweets.collectAsState()
-    val post by viewModel.post.collectAsState()
+    val postData by viewModel.postData.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.handleGetPosts()
@@ -51,7 +51,7 @@ fun TweetsScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
+                .padding(top = innerPadding.calculateTopPadding()),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             // ── Stories Rail ─────────────────────────────────
@@ -70,11 +70,13 @@ fun TweetsScreen(
             }
 
             // ── Tweet Cards ───────────────────────────────────
-            items(tweets, key = { it.id }) { tweet ->
+            items(postData.posts.orEmpty(), key = { it.id }) { post ->
                 TweetCard(
-                    tweet = tweet,
-                    onLikeClick = { viewModel.toggleLike(tweet.id) },
-                    onBookmarkClick = { viewModel.toggleBookmark(tweet.id) }
+                    post = post,
+                    onLikeClick = { viewModel.toggleLike(post.id) },
+                    onCommentClick = { },
+                    onRetweetClick = { },
+                    onShareClick = { }
                 )
             }
 
