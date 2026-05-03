@@ -18,6 +18,7 @@ import com.dattran.unitconverter.social.ui.screens.edit_profile.EditProfileScree
 import com.dattran.unitconverter.social.ui.screens.edit_profile.EditProfileViewModel
 import com.dattran.unitconverter.social.ui.screens.home_qtv.HomeQTV
 import com.dattran.unitconverter.social.ui.screens.loading_app.LoadingApp
+import com.dattran.unitconverter.social.ui.screens.loading_app.LoadingAppViewModel
 import com.dattran.unitconverter.social.ui.screens.login.LoginScreen
 import com.dattran.unitconverter.social.ui.screens.login.LoginViewModel
 import com.dattran.unitconverter.social.ui.screens.post_tweet.PostTweetScreen
@@ -63,7 +64,8 @@ fun NavGraph(
     editProfileViewModel: EditProfileViewModel,
     registerViewModel: RegisterViewModel,
     postTweetViewModel: PostTweetViewModel,
-    tweetsViewModel: TweetsViewModel
+    tweetsViewModel: TweetsViewModel,
+    loadingAppViewModel: LoadingAppViewModel
 ) {
     // ⭐ Get current route để biết có hiển thị BottomNavigationBar không
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
@@ -74,7 +76,11 @@ fun NavGraph(
         startDestination = Screen.LoadingApp.route
     ) {
         composable(Screen.LoadingApp.route) {
-            LoadingApp(userPreferences = userPreferences, navController = navController)
+            LoadingApp(
+                userPreferences = userPreferences,
+                navController = navController,
+                loadingAppViewModel = loadingAppViewModel
+            )
         }
 
         // Màn hình không có BottomNavigationBar

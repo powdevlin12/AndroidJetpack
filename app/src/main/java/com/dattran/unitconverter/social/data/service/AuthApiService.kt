@@ -1,5 +1,6 @@
 package com.dattran.unitconverter.social.data.service
 
+import com.dattran.unitconverter.social.data.model.GetMeResponse
 import com.dattran.unitconverter.social.data.model.GetPostResponse
 import com.dattran.unitconverter.social.data.model.TweetCreateBody
 import com.dattran.unitconverter.social.data.model.TweetCreateResponse
@@ -31,6 +32,11 @@ interface AuthApiService {
         @Path("user_id") userId: String,
         @Body user: UserUpdateBody,
     ): UserLogoutResponse
+
+    @GET("users/get-me")
+    suspend fun getMe(
+        @Header("Authorization") authorization: String
+    ): GetMeResponse
 
     //    Post tweet
     @POST("tweets/")

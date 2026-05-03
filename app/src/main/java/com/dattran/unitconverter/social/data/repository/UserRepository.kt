@@ -2,6 +2,7 @@ package com.dattran.unitconverter.social.data.repository
 
 import com.dattran.unitconverter.social.data.local.dao.UserDao
 import com.dattran.unitconverter.social.data.local.entity.UserEntity
+import com.dattran.unitconverter.social.data.model.GetMeResponse
 import com.dattran.unitconverter.social.data.model.TweetCreateBody
 import com.dattran.unitconverter.social.data.model.TweetCreateResponse
 import com.dattran.unitconverter.social.data.model.UserLogoutBody
@@ -61,6 +62,15 @@ class UserRepository(
                 authorization = authorization,
                 user = UserLogoutBody(refreshToken = refreshToken)
             )
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getMe(token: String): Result<GetMeResponse> {
+        return try {
+            val response = apiService.getMe(authorization = "Bearer $token")
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)

@@ -25,6 +25,7 @@ import com.dattran.unitconverter.social.data.repository.UserRepository
 import com.dattran.unitconverter.social.data.service.AuthApiService
 import com.dattran.unitconverter.social.navigation.NavGraph
 import com.dattran.unitconverter.social.ui.screens.edit_profile.EditProfileViewModel
+import com.dattran.unitconverter.social.ui.screens.loading_app.LoadingAppViewModel
 import com.dattran.unitconverter.social.ui.screens.login.LoginViewModel
 import com.dattran.unitconverter.social.ui.screens.post_tweet.PostTweetViewModel
 import com.dattran.unitconverter.social.ui.screens.profile.ProfileViewModel
@@ -71,7 +72,8 @@ class MainActivity : ComponentActivity() {
         val postTweetViewModel =
             PostTweetViewModel(repository = tweetRepository);
         val tweetsViewModel = TweetsViewModel(repository = tweetRepository)
-
+        val loadingAppViewModel =
+            LoadingAppViewModel(repository = userInfoRepository, userDao = userDao)
 
         // ⭐ BƯỚC 3: Sau khi load xong, ẩn splash
         keepSplashScreen = false
@@ -97,7 +99,8 @@ class MainActivity : ComponentActivity() {
                     editProfileViewModel = editProfileViewModel,
                     registerViewModel = registerViewModel,
                     postTweetViewModel = postTweetViewModel,
-                    tweetsViewModel = tweetsViewModel
+                    tweetsViewModel = tweetsViewModel,
+                    loadingAppViewModel = loadingAppViewModel
                 )
             }
         }
