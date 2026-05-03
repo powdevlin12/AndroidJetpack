@@ -57,16 +57,19 @@ class MainActivity : ComponentActivity() {
         // ⭐ Get database instance and UserDao
         val database = AppDatabase.getDatabase(applicationContext)
         val userDao = database.userDao()
+        val postDao = database.postDao()
         val apiService = AuthApiService.create()
         val userInfoRepository = UserRepository(userDao = userDao, apiService)
-        val tweetRepository = TweetRepository(apiService = apiService, userDao = userDao)
+        val tweetRepository =
+            TweetRepository(apiService = apiService, userDao = userDao, postDao = postDao)
 
         val loginViewModel =
             LoginViewModel(userPreferences, userInfoRepository = userInfoRepository)
         val profileViewModel = ProfileViewModel(userDao = userDao)
         val editProfileViewModel = EditProfileViewModel(userDao = userDao)
         val registerViewModel = RegisterViewModel();
-        val postTweetViewModel = PostTweetViewModel(repository = tweetRepository);
+        val postTweetViewModel =
+            PostTweetViewModel(repository = tweetRepository);
         val tweetsViewModel = TweetsViewModel(repository = tweetRepository)
 
 

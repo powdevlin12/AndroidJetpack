@@ -4,13 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.dattran.unitconverter.social.data.local.dao.PostsDao
 import com.dattran.unitconverter.social.data.local.dao.UserDao
+import com.dattran.unitconverter.social.data.local.entity.PostsEntity
 import com.dattran.unitconverter.social.data.local.entity.UserEntity
 
 // ⭐ @Database annotation
 @Database(
-    entities = [UserEntity::class], // ⭐ List of entities
-    version = 3, // ⭐ Database version (incremented due to schema change)
+    entities = [UserEntity::class, PostsEntity::class], // ⭐ List of entities
+    version = 4, // ⭐ Database version (incremented due to schema change)
     exportSchema = false // ⭐ Don't export schema
 )
 //@TypeConverters(TypeConverters::class) // ⭐ Type converters (nếu có)
@@ -18,6 +20,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     // ⭐ Abstract function cho mỗi DAO
     abstract fun userDao(): UserDao
+    abstract fun postDao(): PostsDao
 
     companion object {
         @Volatile

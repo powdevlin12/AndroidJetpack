@@ -7,37 +7,40 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Send
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.dattran.unitconverter.social.data.local.entity.PostsEntity
 import com.dattran.unitconverter.social.data.model.Post
 import com.dattran.unitconverter.social.utils.toTimeAgo
-import java.util.Locale
 
 // ── Design tokens ────────────────────────────────────────────
 private val Primary = Color(0xFF0058BC)
@@ -49,8 +52,8 @@ private val LikeRed = Color(0xFFEF4444)
 private val RetweetGreen = Color(0xFF10B981)
 
 @Composable
-fun TweetCard(
-    post: Post,
+fun TweetCardOffline(
+    post: PostsEntity,
     isLiked: Boolean = false,
     likeCount: Int = 0,
     commentCount: Int = 0,
@@ -87,8 +90,8 @@ fun TweetCard(
             ) {
                 // Avatar
                 AsyncImage(
-                    model = post.user.avatar.ifBlank { null },
-                    contentDescription = post.user.name,
+                    model = null,
+                    contentDescription = post.nameUser,
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
@@ -103,7 +106,7 @@ fun TweetCard(
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Text(
-                            text = post.user.name,
+                            text = post.nameUser,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = OnSurface
@@ -117,7 +120,7 @@ fun TweetCard(
                         )
                     }
                     Text(
-                        text = "@${post.user.email.substringBefore("@")} • ${post.createdAt.toTimeAgo()}",
+                        text = "@${post.email.substringBefore("@")} • ${post.createAt.toTimeAgo()}",
                         fontSize = 12.sp,
                         color = Secondary,
                         letterSpacing = 0.sp
@@ -143,8 +146,8 @@ fun TweetCard(
         Text(
             text = buildTweetText(
                 content = post.content,
-                hashtags = post.hashTags?.map { it.name } ?: emptyList(),
-                mentions = post.mentions?.map { it.name } ?: emptyList()
+                hashtags = emptyList(),
+                mentions = emptyList()
             ),
             fontSize = 15.sp,
             lineHeight = 24.sp,
@@ -269,77 +272,3 @@ fun TweetCard(
         }
     }
 }
-
-// ── Helper composable ────────────────────────────────────────
-
-@Composable
-fun EngagementButton(
-    icon: @Composable () -> Unit,
-    count: Int,
-    activeColor: Color,
-    isActive: Boolean,
-    onClick: () -> Unit
-) {
-    val color by animateColorAsState(
-        targetValue = if (isActive) activeColor else Secondary,
-        label = "engagement_color"
-    )
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
-        modifier = Modifier
-            .clickable { onClick() }
-            .padding(4.dp)
-    ) {
-        icon()
-        if (count > 0) {
-            Text(
-                text = formatCount(count),
-                fontSize = 12.sp,
-                color = color
-            )
-        }
-    }
-}
-
-// ── Text builder ─────────────────────────────────────────────
-
-fun buildTweetText(
-    content: String,
-    hashtags: List<String>,
-    mentions: List<String>
-) = buildAnnotatedString {
-    val words = content.split(" ")
-    words.forEachIndexed { index, word ->
-        val cleanWord = word.trimEnd(',', '.', '!', '?')
-        val isHashtag = hashtags.any { "#${it.lowercase()}" == cleanWord.lowercase() }
-                || cleanWord.startsWith("#")
-        val isMention = mentions.any { "@${it.lowercase()}" == cleanWord.lowercase() }
-                || cleanWord.startsWith("@")
-
-        when {
-            isHashtag || isMention -> withStyle(
-                SpanStyle(color = Primary, fontWeight = FontWeight.Medium)
-            ) { append(word) }
-
-            else -> append(word)
-        }
-        if (index < words.lastIndex) append(" ")
-    }
-}
-
-// ── Formatters ───────────────────────────────────────────────
-
-fun formatCount(count: Int): String = when {
-    count >= 1_000_000 -> "${count / 1_000_000}M"
-    count >= 1_000 -> String.format(Locale.US, "%.1f", count / 1_000.0)
-        .trimEnd('0').trimEnd('.') + "K"
-
-    else -> count.toString()
-}
-
-/**
- * Very lightweight relative-time helper.
- * Replace with a proper library (e.g. PrettyTime / Joda) if needed.
- */
-

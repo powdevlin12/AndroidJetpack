@@ -28,6 +28,7 @@ import androidx.navigation.NavController
 import com.dattran.unitconverter.social.navigation.Screen
 import com.dattran.unitconverter.social.ui.screens.tweets.components.StoriesRail
 import com.dattran.unitconverter.social.ui.screens.tweets.components.TweetCard
+import com.dattran.unitconverter.social.ui.screens.tweets.components.TweetCardOffline
 import kotlinx.coroutines.launch
 
 private val PrimaryBlue = Color(0xFF257BF4)
@@ -98,6 +99,18 @@ fun TweetsScreen(
                         onRetweetClick = { },
                         onShareClick = { }
                     )
+                }
+
+                if (postData.isUseOfflinePost) {
+                    items(postData.postsOffline.orEmpty(), key = { it.id }) { post ->
+                        TweetCardOffline(
+                            post = post,
+                            onLikeClick = { },
+                            onCommentClick = { },
+                            onRetweetClick = { },
+                            onShareClick = { }
+                        )
+                    }
                 }
 
                 // ── Footer spacer ─────────────────────────────────
